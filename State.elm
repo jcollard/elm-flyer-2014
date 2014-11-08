@@ -25,9 +25,11 @@ player = { pos = {x = -400, y = 0},
 
 type Missile = Object {vel: Velocity, damage: Int }
 
+stdMissileImg = toForm (image 25 25 "assets/standard-missile.gif")
+
 standardMissile : Position -> Missile
 standardMissile pos = {pos = pos,
                        box = {x = -5, y = -2, width = 10, height = 4},
-                       form = (rect 10 4 |> filled red),
                        vel = {x = 5, y = 0},
+                       form = stdMissileImg,
                        damage = 5}
