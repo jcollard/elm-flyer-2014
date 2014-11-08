@@ -1,0 +1,7 @@
+# Vim swap files
+*.sw[a-z]
+
+# Elm files
+cache/
+build/
+elm_dependencies
