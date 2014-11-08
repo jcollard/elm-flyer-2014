@@ -37,3 +37,6 @@ standardMissile pos = {pos = {x = pos.x + magicMissile, y = pos.y},
                        vel = {x = 5, y = 0},
                        form = stdMissileImg,
                        damage = 5}
+
+screenBounds : {left: Float, right: Float, top: Float, bottom: Float}
+screenBounds = {left = -500, right = 500, top = 250, bottom = -250}

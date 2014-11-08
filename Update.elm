@@ -3,6 +3,7 @@ import Playground (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 import State
+import State (screenBounds, Object)
 import Physics
 
 type State = State.State
@@ -39,3 +40,16 @@ addNewProjectiles player ms input = case input of
             State.standardMissile player.pos :: ms
                 | otherwise -> ms
     otherwise -> ms
+
+outOfBounds : Object a -> Bool
+outOfBounds obj =
+    let objLeft = obj.pos.x - (obj.box.width / 2)
+        objRight = obj.pos.x + (obj.box.width / 2)
+        objTop = obj.pos.y + (obj.box.height / 2)
+        objBot = obj.pos.y - (obj.box.height / 2)
+        screenLeft = screenBounds.left
+        screenRight = screenBounds.right
+        screenTop = screenBounds.top
+        screenBot = screenBounds.bottom
+    in (objRight < screenLeft) || (objLeft > screenRight) ||
+        (objBot > screenTop) || (objTop < screenBot)
