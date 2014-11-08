@@ -11,4 +11,4 @@ renderObject : State.Object a -> Form
 renderObject { pos, form } = move (pos.x, pos.y) form
 
 backdrop : Form
-backdrop = rect 900 400 |> filled black
+backdrop = rect 1000 500 |> filled black
