@@ -8,7 +8,7 @@ type Position = { x : Float, y : Float }
 type Velocity = { x : Float, y : Float }
 type BoundingBox = { x : Float, y : Float, width : Float, height : Float }
 
-type Object a = { a | pos : Position, vel: Velocity, 
+type Object a = { a | pos : Position, vel: Velocity,
                       box : BoundingBox, form : Form }
 
 initialState : State
@@ -25,13 +25,14 @@ player = { pos = {x = -400, y = 0},
            vel = {x = 0, y = 0},
            box = { x = -20, y = -25, width = 100, height = 57 },
            form = toForm (image 100 57 "assets/space-ship.gif")}
+magicMissile = player.box.width / 2
 
 type Missile = Object {damage: Int }
 
 stdMissileImg = toForm (image 25 25 "assets/standard-missile.gif")
 
 standardMissile : Position -> Missile
-standardMissile pos = {pos = pos,
+standardMissile pos = {pos = {x = pos.x + magicMissile, y = pos.y},
                        box = {x = -5, y = -2, width = 10, height = 4},
                        vel = {x = 5, y = 0},
                        form = stdMissileImg,

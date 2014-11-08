@@ -14,7 +14,8 @@ update rw input state = case input of
     otherwise ->
         let player = state.player
             player' = movePlayer player input
-            playerProjectiles' = updateProjectiles state input
+            playerProjectiles' = addNewProjectiles player'
+                state.playerProjectiles input
         in {state | player <- player', playerProjectiles <- playerProjectiles' }
 
 -- There's no player class yet
@@ -31,14 +32,6 @@ movePlayer player input = case input of
                 | otherwise -> player
     otherwise -> player
 
-updateProjectiles : State -> Input -> [State.Missile]
-updateProjectiles state input = 
-    let projectiles' = map moveMissile state.playerProjectiles
-        projectiles'' = addNewProjectiles state.player projectiles' input
-   in projectiles''
-
-moveMissile : State.Missile -> State.Missile
-moveMissile m = { m | pos <- pos (m.pos.x + m.vel.x) (m.pos.y + m.vel.y) }
 
 addNewProjectiles : State.Player -> [State.Missile] -> Input -> [State.Missile]
 addNewProjectiles player ms input = case input of
