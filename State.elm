@@ -14,6 +14,6 @@ initialObject = { pos = { x = 0, y = 0 },
                   box = { x = -10, y = -10, width = 20, height = 20 },
                   form = circle 50 |> filled blue }
 
-player = { pos = {x = -20, y = 100},
-           box = { x = -20, y = -25, width = 40, height = 50 },
-           form = rect 40 50 |> filled red }
+player = { pos = {x = -400, y = 0},
+           box = { x = -20, y = -25, width = 100, height = 57 },
+           form = rect 100 57 |> filled red }
