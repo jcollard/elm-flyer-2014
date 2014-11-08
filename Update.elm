@@ -11,13 +11,14 @@ pos = State.Position
 
 update : RealWorld -> Input -> State -> State
 update rw input state = case input of
-    Passive t -> Physics.physics t state
+    Passive t -> (cleanUp << Physics.physics t) state
     otherwise ->
         let player = state.player
             player' = movePlayer player input
             playerProjectiles' = addNewProjectiles player'
                 state.playerProjectiles input
-        in {state | player <- player', playerProjectiles <- playerProjectiles' }
+        in {state | player <- player',
+                  playerProjectiles <- playerProjectiles'}
 
 -- There's no player class yet
 movePlayer : State.Player -> Input -> State.Player
@@ -41,15 +42,17 @@ addNewProjectiles player ms input = case input of
                 | otherwise -> ms
     otherwise -> ms
 
+cleanUp : State -> State
+cleanUp state =
+    let pps = filter (not << outOfBounds) state.playerProjectiles
+        objs = filter (not << outOfBounds) state.objects
+    in {state | playerProjectiles <- pps, objects <- objs}
+
 outOfBounds : Object a -> Bool
 outOfBounds obj =
     let objLeft = obj.pos.x - (obj.box.width / 2)
         objRight = obj.pos.x + (obj.box.width / 2)
         objTop = obj.pos.y + (obj.box.height / 2)
         objBot = obj.pos.y - (obj.box.height / 2)
-        screenLeft = screenBounds.left
-        screenRight = screenBounds.right
-        screenTop = screenBounds.top
-        screenBot = screenBounds.bottom
-    in (objRight < screenLeft) || (objLeft > screenRight) ||
-        (objBot > screenTop) || (objTop < screenBot)
+    in (objRight < screenBounds.left) || (objLeft > screenBounds.right) ||
+        (objBot > screenBounds.top) || (objTop < screenBounds.bottom)
