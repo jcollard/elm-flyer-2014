@@ -3,16 +3,19 @@ import Playground (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 import State
+import Physics
 
 type State = State.State
 pos = State.Position
 
 update : RealWorld -> Input -> State -> State
-update rw input state =
-   let player = state.player
-       player' = movePlayer player input
-       playerProjectiles' = updateProjectiles state input
-   in {state | player <- player', playerProjectiles <- playerProjectiles' }
+update rw input state = case input of
+    Passive t -> Physics.physics t state
+    otherwise ->
+        let player = state.player
+            player' = movePlayer player input
+            playerProjectiles' = updateProjectiles state input
+        in {state | player <- player', playerProjectiles <- playerProjectiles' }
 
 -- There's no player class yet
 movePlayer : State.Player -> Input -> State.Player
