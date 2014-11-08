@@ -1,0 +1,14 @@
+{
+    "version": "0.1",
+    "summary": "concise, helpful summary of your project",
+    "description": "full description of this project, describe your use case",
+    "license": "BSD3",
+    "exposed-modules": [],
+    "elm-version": "0.13",
+    "dependencies": {
+        "jcollard/generator": "0.4",
+        "jcollard/elm-playground": "0.2.4.5",
+        "jcollard/key-constants": "1.5"
+    },
+    "repository": "https://github.com/USER/PROJECT.git"
+}
