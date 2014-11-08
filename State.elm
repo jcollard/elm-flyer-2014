@@ -17,13 +17,13 @@ initialState = { player = player, playerProjectiles = [],
 
 initialObject = { pos = { x = 0, y = 0 },
                   vel = { x = -3, y = 0},
-                  box = { x = -10, y = -10, width = 20, height = 20 },
-                  form = circle 50 |> filled blue }
+                  box = { x = -75, y = 70.5, width = 150, height = 141 },
+                  form = toForm (image 150 141 "assets/alien-warrior.gif")}
 
 type Player = Object {}
 player = { pos = {x = -400, y = 0},
            vel = {x = 0, y = 0},
-           box = { x = -20, y = -25, width = 100, height = 57 },
+           box = { x = -20, y = 25, width = 100, height = 57 },
            form = toForm (image 100 57 "assets/space-ship.gif")}
 magicMissile = player.box.width / 2
 
@@ -33,10 +33,10 @@ stdMissileImg = toForm (image 25 25 "assets/standard-missile.gif")
 
 standardMissile : Position -> Missile
 standardMissile pos = {pos = {x = pos.x + magicMissile, y = pos.y},
-                       box = {x = -5, y = -2, width = 10, height = 4},
+                       box = {x = -12.5, y = 12.5, width = 25, height = 25},
                        vel = {x = 5, y = 0},
                        form = stdMissileImg,
                        damage = 5}
 
-screenBounds : {left: Float, right: Float, top: Float, bottom: Float}
-screenBounds = {left = -500, right = 500, top = 250, bottom = -250}
+screenBounds = {left = -500, right = 500, top = 250, bottom = -250,
+                width = 1000, height = 500}
