@@ -7,3 +7,8 @@ type Enemy = Object {
       time : Time,
       action : Time -> Velocity
                     }
+
+handleAction : Enemy -> Enemy
+handleAction enemy =
+    { enemy | time <- enemy.time + 1,
+              vel <- enemy.action enemy.time }
