@@ -13,9 +13,7 @@ type State = { player : Player,
 initialState : State
 initialState = { player = player, 
                  projectiles = [],
-                 enemies = [AlienWarrior.spawn {x = 450, y = 0},
-                            AlienWarrior.spawn {x = 500, y = 150},
-                            AlienWarrior.spawn {x = 500, y = -150} ] }
+                 enemies = [AlienWarrior.spawn {x = 450, y = 0}] }
 
 
 

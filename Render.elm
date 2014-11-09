@@ -4,9 +4,10 @@ import Playground (..)
 import Playground.Input (..)
 import State (screenBounds, State)
 import Object (..)
+import Debug 
 
 render : RealWorld -> State -> [Form]
-render rw state =  backdrop :: 
+render rw state = backdrop :: 
                    renderObject state.player :: 
                   (map renderObject state.projectiles) ++ 
                   (map renderObject state.enemies) ++ 

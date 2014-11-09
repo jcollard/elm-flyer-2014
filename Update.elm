@@ -4,17 +4,19 @@ import Playground (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 import State (..)
+import Debug
 
 import Player
 import Physics
 
 update : RealWorld -> Input -> State -> State
-update rw input state = case input of
-    Passive t -> (cleanUp << Physics.physics t) state
-    otherwise ->  
+update rw input state = 
+    case input of
+      Passive t -> (cleanUp << Physics.physics t) state
+      otherwise ->  
         let player' = Player.move state.player input
             state' = handleFire input state
-        in { state | player <- player' }
+        in { state' | player <- player' }
 
 
 handleFire : Input -> State -> State

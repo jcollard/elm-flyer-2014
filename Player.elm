@@ -43,8 +43,8 @@ move player input =
     in { player | traits <- traits' }
 
 fire : Player -> [Missile]
-fire { traits } = 
-    if traits.cooldown > 0 then [] else traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
+fire { traits } = traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
+--    if traits.cooldown > 0 then [] else traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
 
 
 passive : Traits a -> Traits a
