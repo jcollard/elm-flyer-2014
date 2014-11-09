@@ -2,12 +2,12 @@ module State where
 
 import Object (..)
 import Enemy (..)
-import Missle (..)
+import Missile (..)
 import Player (..)
 import Enemy.AlienWarrior as AlienWarrior
 
 type State = { player : Player,
-               projectiles : [Missle],
+               projectiles : [Missile],
                enemies : [Enemy] }
 
 initialState : State

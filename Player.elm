@@ -2,20 +2,21 @@ module Player where
 
 import Playground.Input (..)
 import Object (..)
-import Missle (Missle)
-import Missle
+import Missile (Missile)
+import Missile
+import Missile.Standard
 import Keyboard.Keys as Keys
 
 playerImage = toForm (image 100 57 "assets/space-ship.gif")
 
-type Player = Object { fire : Location -> [Missle] }
+type Player = Object { fire : Location -> [Missile] }
 
 player : Player
 player = { pos = {x = -400, y = 0},
            vel = {x = 0, y = 0},
            dim = { width = 100, height = 57 },
            form = playerImage,
-           fire = Missle.standardMissle
+           fire = Missile.Standard.spawn
          }
 
 move : Player -> Input -> Player
@@ -31,5 +32,5 @@ move player input = case input of
                 | otherwise -> player
     otherwise -> player
 
-fire : Player -> [Missle]
+fire : Player -> [Missile]
 fire { pos, dim, fire } = fire { x = pos.x + dim.width/2, y = pos.y }
