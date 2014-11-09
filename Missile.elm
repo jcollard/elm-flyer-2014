@@ -2,7 +2,11 @@ module Missile where
 
 import Object (..)
 
-type Missile = Object { damage: Int }
+type AdditionalTraits = { damage : Int,
+                           time : Time,
+                           cooldown : Time }
 
-handleAction : Missile -> Missile
-handleAction m = m
+type MissileTraits = Traits AdditionalTraits
+
+type Missile = Object AdditionalTraits
+

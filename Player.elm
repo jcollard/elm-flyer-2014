@@ -9,14 +9,17 @@ import Keyboard.Keys as Keys
 
 playerImage = toForm (image 100 57 "assets/space-ship.gif")
 
-type Player = Object { fire : Location -> [Missile] }
+type Player = Object { fire : Location -> [Missile],
+                       cooldown : Time }
 
 player : Player
 player = { pos = {x = -400, y = 0},
            vel = {x = 0, y = 0},
            dim = { width = 100, height = 57 },
            form = playerImage,
-           fire = Missile.Standard.spawn
+           fire = Missile.Standard.spawn,
+           cooldown = 0,
+           passive = passive
          }
 
 move : Player -> Input -> Player
@@ -33,4 +36,12 @@ move player input = case input of
     otherwise -> player
 
 fire : Player -> [Missile]
-fire { pos, dim, fire } = fire { x = pos.x + dim.width/2, y = pos.y }
+fire { pos, dim, fire, cooldown } = 
+    if cooldown > 0 then [] else fire { x = pos.x + dim.width/2, y = pos.y }
+
+passive : Time -> Velocity
+passive t = { x = 0, y = 0 }
+
+handleAction : Player -> Player
+handleAction p =
+    { p | vel <- p.passive 0 }
