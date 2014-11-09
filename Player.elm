@@ -9,6 +9,8 @@ import Keyboard.Keys as Keys
 
 type AdditionalTraits = { cooldown : Time, fire : Location -> [Missile] }
 
+type PlayerTraits = Traits AdditionalTraits
+
 type Player = Object AdditionalTraits {}
 
 playerImage : Form
@@ -43,9 +45,10 @@ move player input =
     in { player | traits <- traits' }
 
 fire : Player -> [Missile]
-fire { traits } = traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
---    if traits.cooldown > 0 then [] else traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
+fire { traits } = 
+    if traits.cooldown > 0 then [] else traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
 
 
-passive : Traits a -> Traits a
-passive traits = { traits | vel <- { x = 0, y = 0 } }
+passive : PlayerTraits -> PlayerTraits
+passive traits = { traits | vel <- { x = 0, y = 0 },
+                            cooldown <- max 0 (traits.cooldown - 1) }

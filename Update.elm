@@ -11,11 +11,12 @@ import Physics
 
 update : RealWorld -> Input -> State -> State
 update rw input state = 
+    let player = Debug.watch "Player" (state.player) in
     case input of
       Passive t -> (cleanUp << Physics.physics t) state
       otherwise ->  
-        let player' = Player.move state.player input
-            state' = handleFire input state
+        let state' = handleFire input state
+            player' = Player.move state'.player input
         in { state' | player <- player' }
 
 
@@ -24,7 +25,15 @@ handleFire input state =
     case input of
       Tap k -> if | k `Keys.equals` Keys.space -> 
                     let ps = Player.fire state.player
-                    in { state | projectiles <- ps ++ state.projectiles }
+                        player = state.player
+                        traits = player.traits
+                        cooldown' = if isEmpty ps 
+                                    then traits.cooldown
+                                    else (head ps).traits.cooldown
+                        traits' = { traits | cooldown <- cooldown' }
+                        player' = { player | traits <- traits' }
+                    in { state | projectiles <- ps ++ state.projectiles,
+                                 player <- Debug.watch "Player" player' }
                   | otherwise -> state
       otherwise -> state
 
