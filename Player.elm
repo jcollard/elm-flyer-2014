@@ -6,6 +6,7 @@ import Missile (Missile)
 import Missile
 import Missile.Standard
 import Keyboard.Keys as Keys
+import State.ScreenBounds (screenBounds)
 
 type AdditionalTraits = { cooldown : Time, fire : Location -> [Missile] }
 
@@ -53,7 +54,20 @@ fire { traits } =
 
 passive : PlayerTraits -> PlayerTraits
 passive traits = { traits | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
+                            pos <- keepOnScreen traits,
                             cooldown <- max 0 (traits.cooldown - 1) }
+
+keepOnScreen : PlayerTraits -> Location
+keepOnScreen { dim, pos } = 
+    let leftEdge = pos.x - dim.width/8
+        x' = if leftEdge >= screenBounds.left then pos.x else screenBounds.left + dim.width/8
+        rightEdge = x' + dim.width/8
+        x'' = if rightEdge <= screenBounds.right then x' else screenBounds.right - dim.width/8
+        topEdge = pos.y + dim.height/8
+        y' = if topEdge <= screenBounds.top then pos.y else screenBounds.top - dim.height/8
+        bottomEdge = y' - dim.height/8
+        y'' = if bottomEdge >= screenBounds.bottom then y' else screenBounds.bottom + dim.height/8
+    in { x = x'', y = y'' }
 
 reduce : Float -> Float
 reduce x = if | abs x <= 0.01 -> 0

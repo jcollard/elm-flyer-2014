@@ -1,5 +1,7 @@
 module State where
 
+import State.ScreenBounds (..) 
+import State.ScreenBounds
 import Object (..)
 import Enemy (..)
 import Missile (..)
@@ -15,7 +17,6 @@ initialState = { player = player,
                  projectiles = [],
                  enemies = [AlienWarrior.spawn {x = 450, y = 0}] }
 
+screenBounds = State.ScreenBounds.screenBounds
 
 
-screenBounds = {left = -500, right = 500, top = 250, bottom = -250,
-                width = 1000, height = 500}
