@@ -15,13 +15,15 @@ playerImage : Form
 playerImage = toForm (image 100 57 "assets/space-ship.gif")
 
 player : Player
-player = object { pos = {x = -400, y = 0},
-                  vel = {x = 0, y = 0},
-                  dim = { width = 100, height = 57 },
-                  form = playerImage,
-                  fire = Missile.Standard.fire,
-                  cooldown = 0
-                }
+player = 
+    let p = object { pos = {x = -400, y = 0},
+                     vel = {x = 0, y = 0},
+                     dim = { width = 100, height = 57 },
+                     form = playerImage,
+                     fire = Missile.Standard.fire,
+                     cooldown = 0
+                   }
+    in { p | passive <- passive }
 
 move : Player -> Input -> Player
 move player input = 
