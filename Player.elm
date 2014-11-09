@@ -29,6 +29,10 @@ player =
                      vel = {x = 0, y = 0},
                      dim = { width = 100, height = 57 },
                      form = playerImage,
+-- Quick debug by uncommenting one of these
+--                     fire = Missile.Standard.fire,
+--                     fire = Missile.SplitShot.fire,
+--                     fire = Missile.Rapid.fire,
                      fire = Missile.Nuke.fire,
                      cooldown = 0
                    }
