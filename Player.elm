@@ -27,19 +27,21 @@ player =
                    }
     in { p | passive <- passive }
 
+acceleration = 0.75
+
 move : Player -> Input -> Player
 move player input = 
     let traits = player.traits
         traits' = 
             case input of
               Key k -> if | k `Keys.equals` Keys.d ->
-                           {traits | vel <- { x = 2, y = traits.vel.y } }
+                           {traits | vel <- { x = acceleration + traits.vel.x, y = traits.vel.y } }
                           | k `Keys.equals` Keys.a ->
-                            {traits | vel <- { x = -2, y = traits.vel.y } }
+                            {traits | vel <- { x = traits.vel.x - acceleration, y = traits.vel.y } }
                           | k `Keys.equals` Keys.w ->
-                            {traits | vel <- { x = traits.vel.x, y = 2 } }
+                            {traits | vel <- { x = traits.vel.x, y = acceleration + traits.vel.y } }
                           | k `Keys.equals` Keys.s ->
-                            {traits | vel <- { x = traits.vel.x, y = -2 } }
+                            {traits | vel <- { x = traits.vel.x, y = traits.vel.y - acceleration } }
                           | otherwise -> traits
               otherwise -> traits
     in { player | traits <- traits' }
@@ -50,5 +52,9 @@ fire { traits } =
 
 
 passive : PlayerTraits -> PlayerTraits
-passive traits = { traits | vel <- { x = 0, y = 0 },
+passive traits = { traits | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
                             cooldown <- max 0 (traits.cooldown - 1) }
+
+reduce : Float -> Float
+reduce x = if | abs x <= 0.01 -> 0
+              | otherwise -> x/1.1
