@@ -4,9 +4,9 @@ import Playground (..)
 import Playground.Input (..)
 import State (screenBounds, State, Object)
 
-render : State -> [Form]
-render state =  backdrop :: renderObject state.player :: (map renderObject
-    state.playerProjectiles) ++ (map renderObject state.objects) ++ ui
+render : RealWorld -> State -> [Form]
+render rw state =  backdrop :: renderObject state.player :: (map renderObject
+    state.playerProjectiles) ++ (map renderObject state.objects) ++ (ui rw)
 
 renderObject : Object a -> Form
 renderObject { pos, form } = move (pos.x, pos.y) form
@@ -18,11 +18,13 @@ ui : RealWorld -> [Form]
 ui rw =
     let width = rw.right * 2
         height = rw.top * 2
-        topRect = rect width ((height - screenBounds.height) / 2)
+        topRectHeight = (height - screenBounds.height) / 2
+        topRect = rect width topRectHeight
         botRect = topRect
-        leftRect = rect ((width - screenBounds.width) / 2) height
+        leftRectWidth = (width - screenBounds.width) / 2
+        leftRect = rect leftRectWidth height
         rightRect = leftRect
         uiRects = [topRect, botRect, leftRect, rightRect]
         ui = map (filled blue) uiRects
-    in zipWith move [(0, height / 2), (0, -height / 2),
-                  (-width / 2, 0), (width / 2, 0)] ui
+    in zipWith move [(0, screenBounds.height/2 + topRectHeight/2), (0, -(screenBounds.height/2 + topRectHeight/2)),
+                  (-(screenBounds.width/2 + leftRectWidth/2), 0), ((screenBounds.width/2 + leftRectWidth/2), 0)] ui
