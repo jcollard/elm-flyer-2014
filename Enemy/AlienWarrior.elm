@@ -24,4 +24,4 @@ spawn pos =
   }
 
 action : Time -> Velocity
-action t = {x = -3, y = 0}
+action t = {x = -3, y = 8 * (cos << degrees <| 5*t)}
