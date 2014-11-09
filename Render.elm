@@ -2,11 +2,15 @@ module Render where
 
 import Playground (..)
 import Playground.Input (..)
-import State (screenBounds, State, Object)
+import State (screenBounds, State)
+import Object (..)
 
 render : RealWorld -> State -> [Form]
-render rw state =  backdrop :: renderObject state.player :: (map renderObject
-    state.playerProjectiles) ++ (map renderObject state.objects) ++ (ui rw)
+render rw state =  backdrop :: 
+                   renderObject state.player :: 
+                  (map renderObject state.projectiles) ++ 
+                  (map renderObject state.enemies) ++ 
+                  (ui rw)
 
 renderObject : Object a -> Form
 renderObject { pos, form } = move (pos.x, pos.y) form
