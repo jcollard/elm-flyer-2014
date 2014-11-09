@@ -25,6 +25,10 @@ handleFire input state =
     case input of
       Tap k -> if | k `Keys.equals` Keys.space -> 
                     let ps = Player.fire state.player
+                        -- This is super annoying...
+                        -- It would be much beter if you could 
+                        -- do { player.traits | modifiers }
+                        -- but the parser can't figure it out
                         player = state.player
                         traits = player.traits
                         cooldown' = if isEmpty ps 
