@@ -3,8 +3,8 @@ module Enemy.AlienWarrior where
 import Object (..)
 import Enemy (..)
 
-width = 150
-height = 141
+width = 50
+height = 50
 
 img : Form
 img = toForm (image width height "../assets/alien-warrior.gif")
@@ -24,4 +24,4 @@ spawn pos =
   }
 
 action : Time -> Velocity
-action t = {x = -3, y = 8 * (cos << degrees <| 5*t)}
+action t = {x = -3 + 2 * ( sin << degrees <| t), y = 8 * (cos << degrees <| 5*t)}
