@@ -40,5 +40,7 @@ outOfBounds obj =
         objRight = obj.pos.x + (obj.dim.width / 2)
         objTop = obj.pos.y + (obj.dim.height / 2)
         objBot = obj.pos.y - (obj.dim.height / 2)
-    in (objRight < screenBounds.left) || (objLeft > screenBounds.right) ||
-        (objBot > screenBounds.top) || (objTop < screenBounds.bottom)
+    in (objRight < screenBounds.left) 
+       || (objLeft > screenBounds.right) 
+       || (objBot > screenBounds.top) 
+       || (objTop < screenBounds.bottom)

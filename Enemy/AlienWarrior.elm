@@ -16,7 +16,7 @@ spawn pos =
   { 
     pos = pos,
     vel = { x = 0, y = 0 },
-    dim = { width = 15, height = 141 },
+    dim = { width = width, height = height },
     form = img,
     health = 10,
     time = 0,
