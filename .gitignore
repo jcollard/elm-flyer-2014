@@ -3,6 +3,8 @@
 
 # Emacs files
 *.*~
+[#]*
+.[#]*
 
 # Elm files
 cache/
