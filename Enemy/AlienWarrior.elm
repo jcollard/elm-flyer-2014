@@ -2,7 +2,6 @@ module Enemy.AlienWarrior where
 
 import Object (..)
 import Enemy (..)
-import Enemy
 
 width = 50
 height = 50
@@ -15,9 +14,9 @@ spawn pos =
     let traits = { pos = pos,
                    health = 10,
                    dim = { width = width, height = height },
-                   form = img,
-                   passive = passive }
-    in Enemy.spawn traits
+                   form = img }
+        warrior = enemy traits
+    in { warrior | passive <- passive }
 
 passive : EnemyTraits -> EnemyTraits
 passive traits = 

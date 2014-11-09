@@ -9,8 +9,21 @@ type Traits a = { a | pos : Location,
                       dim : Dimension,
                       form : Form}
 
-type Object a = { traits : Traits a,
-                  passive : Traits a -> Traits a }
+type Object a b = { b | traits : Traits a,
+                        passive : Traits a -> Traits a,
+                        render : Traits a -> Form }
 
-passive : Object a -> Object a
-passive object = { object | traits <- object.passive object.traits }
+tick : Object a b -> Object a b
+tick object = { object | traits <- object.passive object.traits }
+
+object : Traits a -> Object a {}
+object traits =
+    { traits = traits,
+      passive = passive,
+      render = render }
+
+passive : Traits a -> Traits a
+passive ts = ts
+
+render : Traits a -> Form
+render { pos, form} = move (pos.x, pos.y) form

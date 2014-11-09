@@ -12,8 +12,11 @@ render rw state =  backdrop ::
                   (map renderObject state.enemies) ++ 
                   (ui rw)
 
-renderObject : Object a -> Form
-renderObject { pos, form } = move (pos.x, pos.y) form
+renderObject : Object a b -> Form
+renderObject { traits } = 
+    let pos = traits.pos 
+        form = traits.form
+    in move (pos.x, pos.y) form
 
 backdrop : Form
 backdrop = rect 1000 500 |> filled black

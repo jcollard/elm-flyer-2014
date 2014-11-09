@@ -7,41 +7,43 @@ import Missile
 import Missile.Standard
 import Keyboard.Keys as Keys
 
+type AdditionalTraits = { cooldown : Time, fire : Location -> [Missile] }
+
+type Player = Object AdditionalTraits {}
+
+playerImage : Form
 playerImage = toForm (image 100 57 "assets/space-ship.gif")
 
-type Player = Object { fire : Location -> [Missile],
-                       cooldown : Time }
-
 player : Player
-player = { pos = {x = -400, y = 0},
-           vel = {x = 0, y = 0},
-           dim = { width = 100, height = 57 },
-           form = playerImage,
-           fire = Missile.Standard.spawn,
-           cooldown = 0,
-           passive = passive
-         }
+player = object { pos = {x = -400, y = 0},
+                  vel = {x = 0, y = 0},
+                  dim = { width = 100, height = 57 },
+                  form = playerImage,
+                  fire = Missile.Standard.fire,
+                  cooldown = 0
+                }
 
 move : Player -> Input -> Player
-move player input = case input of
-    Key k -> if | k `Keys.equals` Keys.d ->
-                    {player | vel <- { x = 2, y = player.vel.y } }
-                | k `Keys.equals` Keys.a ->
-                    {player | vel <- { x = -2, y = player.vel.y } }
-                | k `Keys.equals` Keys.w ->
-                    {player | vel <- { x = player.vel.x, y = 2 } }
-                | k `Keys.equals` Keys.s ->
-                    {player | vel <- { x = player.vel.x, y = -2 } }
-                | otherwise -> player
-    otherwise -> player
+move player input = 
+    let traits = player.traits
+        traits' = 
+            case input of
+              Key k -> if | k `Keys.equals` Keys.d ->
+                           {traits | vel <- { x = 2, y = traits.vel.y } }
+                          | k `Keys.equals` Keys.a ->
+                            {traits | vel <- { x = -2, y = traits.vel.y } }
+                          | k `Keys.equals` Keys.w ->
+                            {traits | vel <- { x = traits.vel.x, y = 2 } }
+                          | k `Keys.equals` Keys.s ->
+                            {traits | vel <- { x = traits.vel.x, y = -2 } }
+                          | otherwise -> traits
+              otherwise -> traits
+    in { player | traits <- traits' }
 
 fire : Player -> [Missile]
-fire { pos, dim, fire, cooldown } = 
-    if cooldown > 0 then [] else fire { x = pos.x + dim.width/2, y = pos.y }
+fire { traits } = 
+    if traits.cooldown > 0 then [] else traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
 
-passive : Time -> Velocity
-passive t = { x = 0, y = 0 }
 
-handleAction : Player -> Player
-handleAction p =
-    { p | vel <- p.passive 0 }
+passive : Traits a -> Traits a
+passive traits = { traits | vel <- { x = 0, y = 0 } }

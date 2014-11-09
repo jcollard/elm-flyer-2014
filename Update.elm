@@ -14,8 +14,7 @@ update rw input state = case input of
     otherwise ->  
         let player' = Player.move state.player input
             state' = handleFire input state
-        in { state' | player <- player' }
-
+        in { state | player <- player' }
 
 
 handleFire : Input -> State -> State
@@ -34,12 +33,12 @@ cleanUp state =
         objs = filter (not << outOfBounds) state.enemies
     in {state | projectiles <- pps, enemies <- objs}
 
-outOfBounds : Object a -> Bool
-outOfBounds obj =
-    let objLeft = obj.pos.x - (obj.dim.width / 2)
-        objRight = obj.pos.x + (obj.dim.width / 2)
-        objTop = obj.pos.y + (obj.dim.height / 2)
-        objBot = obj.pos.y - (obj.dim.height / 2)
+outOfBounds : Object a b -> Bool
+outOfBounds { traits } =
+    let objLeft = traits.pos.x - (traits.dim.width / 2)
+        objRight = traits.pos.x + (traits.dim.width / 2)
+        objTop = traits.pos.y + (traits.dim.height / 2)
+        objBot = traits.pos.y - (traits.dim.height / 2)
     in (objRight < screenBounds.left - 200) 
        || (objLeft > screenBounds.right + 200) 
        || (objBot > screenBounds.top + 200) 

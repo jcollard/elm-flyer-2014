@@ -3,21 +3,26 @@ module Missile.Standard where
 import Object (..)
 import Missile (..)
 
+
+width : number
 width = 25
+
+height : number
 height = 25
 
+img : Form
 img = toForm (image width width "../assets/standard-missile.gif")
 
-spawn : Location -> [Missile]
-spawn pos = 
-    let traits = {pos = pos,
-                  dim = {width = width, height = height},
-                  vel = {x = 0, y = 0},
-                  form = img,
-                  time = 0,
-                  damage = 5,
-                  cooldown = 15 }
-    in [{ traits = traits, passive = passive }]
+fire : Location -> [Missile]
+fire pos = 
+    let missile =  object { pos = pos,
+                            dim = { width = width, height = height },
+                            vel = { x = 0, y = 0 },
+                            form = img,
+                            time = 0,
+                            damage = 5,
+                            cooldown = 15 }
+    in [{ missile | passive <- passive }]
 
 passive : MissileTraits -> MissileTraits
 passive traits = 
