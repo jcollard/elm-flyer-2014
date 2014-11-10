@@ -7,7 +7,7 @@ import Object (..)
 import Debug 
 
 render : RealWorld -> State -> [Form]
-render rw state = backdrop :: 
+render rw state = (background state.time) :: 
                    renderObject state.player :: 
                   (map renderObject state.projectiles) ++ 
                   (map renderObject state.enemies) ++ 
@@ -19,8 +19,14 @@ renderObject { traits } =
         form = traits.form
     in move (pos.x, pos.y) form
 
-backdrop : Form
-backdrop = rect 1000 500 |> filled black
+backdrop start offset t =
+    let xt = toFloat <| (round <| t + offset) % 4000
+    in move (start - xt, 0) << toForm <| (image 2001 501 "assets/background-layer-0.png")
+
+background : Time -> Form
+background t = 
+    let t' = t*5
+    in group [backdrop 1500 0 t', backdrop 2500 3000 t']
 
 ui : RealWorld -> [Form]
 ui rw =

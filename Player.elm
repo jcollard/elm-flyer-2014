@@ -31,9 +31,9 @@ player =
                      form = playerImage,
 -- Quick debug by uncommenting one of these
 --                     fire = Missile.Standard.fire,
---                     fire = Missile.SplitShot.fire,
+                     fire = Missile.SplitShot.fire,
 --                     fire = Missile.Rapid.fire,
-                     fire = Missile.Nuke.fire,
+--                     fire = Missile.Nuke.fire,
                      cooldown = 0
                    }
     in { p | passive <- passive }

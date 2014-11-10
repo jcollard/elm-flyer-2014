@@ -10,12 +10,14 @@ import Enemy.AlienWarrior as AlienWarrior
 
 type State = { player : Player,
                projectiles : [Missile],
-               enemies : [Enemy] }
+               enemies : [Enemy],
+               time : Time }
 
 initialState : State
 initialState = { player = player, 
                  projectiles = [],
-                 enemies = [AlienWarrior.spawn {x = 450, y = 0}] }
+                 enemies = [AlienWarrior.spawn {x = 450, y = 0}],
+                 time = 0 }
 
 screenBounds = State.ScreenBounds.screenBounds
 
