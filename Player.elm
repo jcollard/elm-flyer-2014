@@ -62,10 +62,10 @@ fire { traits } =
     if traits.cooldown > 0 then [] else traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
 
 
-passive : PlayerTraits -> PlayerTraits
-passive traits = { traits | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
-                            pos <- keepOnScreen traits,
-                            cooldown <- max 0 (traits.cooldown - 1) }
+passive : Time -> PlayerTraits -> PlayerTraits
+passive time traits = { traits | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
+                                 pos <- keepOnScreen traits,
+                                 cooldown <- max 0 (traits.cooldown - 1) }
 
 keepOnScreen : PlayerTraits -> Location
 keepOnScreen { dim, pos } = 

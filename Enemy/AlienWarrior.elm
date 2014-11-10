@@ -18,9 +18,9 @@ spawn pos =
         warrior = enemy traits
     in { warrior | passive <- passive }
 
-passive : EnemyTraits -> EnemyTraits
-passive traits = 
+passive : Time -> EnemyTraits -> EnemyTraits
+passive dt traits = 
     let t = traits.time
-        t' = t + 1
+        t' = t + dt
         vel' = {x = -5 + 5 * ( sin << degrees <| 3*t), y = 12 * (cos << degrees <| 5*t)}
     in { traits | time <- t', vel <- vel' }

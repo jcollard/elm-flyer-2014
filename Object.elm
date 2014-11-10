@@ -10,11 +10,11 @@ type Traits a = { a | pos : Location,
                       form : Form}
 
 type Object a b = { b | traits : Traits a,
-                        passive : Traits a -> Traits a,
+                        passive : Time -> Traits a -> Traits a,
                         render : Traits a -> Form }
 
-tick : Object a b -> Object a b
-tick object = { object | traits <- object.passive object.traits }
+tick : Time -> Object a b -> Object a b
+tick t object = { object | traits <- object.passive t object.traits }
 
 object : Traits a -> Object a {}
 object traits =
@@ -22,8 +22,8 @@ object traits =
       passive = passive,
       render = render }
 
-passive : Traits a -> Traits a
-passive ts = ts
+passive : Time -> Traits a -> Traits a
+passive t ts = ts
 
 render : Traits a -> Form
 render { pos, form} = move (pos.x, pos.y) form

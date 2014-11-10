@@ -9,15 +9,16 @@ pos = Location
 
 physics : Time -> State.State -> State.State
 physics dt state = 
-    let player' = updateObject state.player
-        projectiles' = map updateObject state.projectiles
-        enemies' =  map updateObject state.enemies
+    let t = dt/16
+        player' = updateObject t state.player
+        projectiles' = map (updateObject t) state.projectiles
+        enemies' =  map (updateObject t) state.enemies
     in {state | player <- player', 
                 projectiles <- projectiles', 
                 enemies <- enemies'}
 
-updateObject : Object a b -> Object a b
-updateObject o =
+updateObject : Time -> Object a b -> Object a b
+updateObject t o =
     let traits = o.traits 
-        traits' = { traits | pos <- pos (traits.pos.x + traits.vel.x) (traits.pos.y + traits.vel.y) }
-    in tick { o | traits <- traits' }
+        traits' = { traits | pos <- pos (traits.pos.x + t*traits.vel.x) (traits.pos.y + t*traits.vel.y) }
+    in tick t { o | traits <- traits' }

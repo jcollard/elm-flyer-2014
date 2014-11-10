@@ -29,10 +29,10 @@ fire pos =
         { missile | passive <- passive, traits <- {traits | time <- -9} },
         { missile | passive <- passive, traits <- {traits | time <- -10} }]
 
-passive : MissileTraits -> MissileTraits
-passive traits = 
+passive : Time -> MissileTraits -> MissileTraits
+passive dt traits = 
     let t = traits.time 
-        t' = t + 1
+        t' = t + dt
         vel' = { x = t/2, y = 15 * (cos << degrees <| 9*t) }
         dim' = { width = 2*t, height = 2*t }
         form' = toForm (image (round dim'.width) (round dim'.height) "../assets/standard-missile.gif")

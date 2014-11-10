@@ -26,10 +26,10 @@ fire pos =
     in [{ missile | passive <- passive 1 },
         { missile | passive <- passive (-1) }]
 
-passive : Float -> MissileTraits -> MissileTraits
-passive modifier traits = 
+passive : Float -> Time -> MissileTraits -> MissileTraits
+passive modifier dt traits = 
     let t = traits.time 
-        t' = t + 1
+        t' = t + dt
         distance = 10
         vel' = { x = min t 15, y = if t <= distance then 0 else modifier * (min (t - distance) 5) }
     in { traits | time <- t', 
