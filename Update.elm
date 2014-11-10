@@ -11,6 +11,7 @@ import Physics
 
 update : RealWorld -> Input -> State -> State
 update rw input state = 
+    let state' = Debug.watch "State" state in
     case input of
       Passive t ->
           let fps = Debug.watch "FPS" (1000 / t) in
