@@ -4,4 +4,4 @@ import State (initialState)
 import Update (update)
 
 
-main = Playground.play { render = render, initialState = initialState, update = update }
+main = Playground.playWithRate 60 { render = render, initialState = initialState, update = update }

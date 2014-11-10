@@ -14,10 +14,14 @@ type State = { player : Player,
                time : Time }
 
 initialState : State
-initialState = { player = player, 
-                 projectiles = [],
-                 enemies = [AlienWarrior.spawn {x = 450, y = 0}],
-                 time = 0 }
+initialState = { player = player 
+               , projectiles = []
+               , enemies = [ AlienWarrior.spawn {x = 550, y = 0} 
+                           , AlienWarrior.spawn {x = 650, y = 100}
+                           , AlienWarrior.spawn {x = 650, y = -100}
+                           , AlienWarrior.spawn {x = 750, y = 0}
+                           ]
+               , time = 0 }
 
 screenBounds = State.ScreenBounds.screenBounds
 

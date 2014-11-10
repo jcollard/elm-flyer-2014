@@ -11,9 +11,10 @@ import Physics
 
 update : RealWorld -> Input -> State -> State
 update rw input state = 
-    let player = Debug.watch "Player" (state.player) in
     case input of
-      Passive t -> (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
+      Passive t ->
+          let fps = Debug.watch "FPS" (1000 / t) in
+          (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
       otherwise ->  
         let state' = handleFire input state
             player' = Player.move state'.player input
@@ -37,7 +38,7 @@ handleFire input state =
                         traits' = { traits | cooldown <- cooldown' }
                         player' = { player | traits <- traits' }
                     in { state | projectiles <- ps ++ state.projectiles,
-                                 player <- Debug.watch "Player" player' }
+                                 player <- player' }
                   | otherwise -> state
       otherwise -> state
 
@@ -55,6 +56,6 @@ outOfBounds { traits } =
         objTop = traits.pos.y + (traits.dim.height / 2)
         objBot = traits.pos.y - (traits.dim.height / 2)
     in (objRight < screenBounds.left - 200) 
-       || (objLeft > screenBounds.right + 200) 
+       || (objLeft > screenBounds.right + 1000) 
        || (objBot > screenBounds.top + 200) 
        || (objTop < screenBounds.bottom - 200)

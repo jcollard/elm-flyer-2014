@@ -21,12 +21,12 @@ renderObject { traits } =
 
 backdrop start offset t =
     let xt = toFloat <| (round <| t + offset) % 4000
-    in move (start - xt, 0) << toForm <| (image 2001 501 "assets/background-layer-0.png")
+    in move (start - xt, 0) << toForm <| (image 2002 502 "assets/background-layer-0.png")
 
 background : Time -> Form
 background t = 
     let t' = t*5
-    in group [backdrop 1500 0 t', backdrop 2501 3000 t']
+    in group [backdrop 1500 0 t', backdrop 2500 3000 t']
 
 ui : RealWorld -> [Form]
 ui rw =
