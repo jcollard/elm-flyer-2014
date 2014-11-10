@@ -15,31 +15,19 @@ fire pos =
                             form = img,
                             time = 0,
                             damage = 5,
-                            cooldown = 100 }
+                            cooldown = 150 }
         traits = missile.traits
-    in [{ missile | passive <- passive },
-        { missile | passive <- passive, traits <- {traits | time <- -1} },
-        { missile | passive <- passive, traits <- {traits | time <- -2} },
-        { missile | passive <- passive, traits <- {traits | time <- -3} },
-        { missile | passive <- passive, traits <- {traits | time <- -4} },
-        { missile | passive <- passive, traits <- {traits | time <- -5} },
-        { missile | passive <- passive, traits <- {traits | time <- -6} },
-        { missile | passive <- passive, traits <- {traits | time <- -7} },
-        { missile | passive <- passive, traits <- {traits | time <- -8} },
-        { missile | passive <- passive, traits <- {traits | time <- -9} },
-        { missile | passive <- passive, traits <- {traits | time <- -10} }]
+    in [ { missile | passive <- passive } ]
 
 passive : Time -> MissileTraits -> MissileTraits
 passive dt traits = 
     let t = traits.time 
         t' = t + dt
-        vel' = { x = t/2, y = 15 * (cos << degrees <| 9*t) }
-        dim' = { width = 2*t, height = 2*t }
+        vel' = { x = 3, y = 10 * (cos << degrees <| 5*t) }
+        dim' = { width = t, height = t }
         form' = toForm (image (round dim'.width) (round dim'.height) "../assets/standard-missile.gif")
-    in if t < 0 then { traits | time <- t' } else
-           Debug.watch "Missile Traits" 
-                    { traits | time <- t', 
-                               vel <- vel',
-                               dim <- dim',
-                               form <- form'
+    in { traits | time <- t', 
+                  vel <- vel',
+                  dim <- dim',
+                  form <- form'
                     }

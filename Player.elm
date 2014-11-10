@@ -31,9 +31,9 @@ player =
                      form = playerImage,
 -- Quick debug by uncommenting one of these
 --                     fire = Missile.Standard.fire,
-                     fire = Missile.SplitShot.fire,
+--                     fire = Missile.SplitShot.fire,
 --                     fire = Missile.Rapid.fire,
---                     fire = Missile.Nuke.fire,
+                     fire = Missile.Nuke.fire,
                      cooldown = 0
                    }
     in { p | passive <- passive }
@@ -63,9 +63,9 @@ fire { traits } =
 
 
 passive : Time -> PlayerTraits -> PlayerTraits
-passive time traits = { traits | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
-                                 pos <- keepOnScreen traits,
-                                 cooldown <- max 0 (traits.cooldown - 1) }
+passive dt traits = { traits | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
+                               pos <- keepOnScreen traits,
+                               cooldown <- max 0 (traits.cooldown - dt) }
 
 keepOnScreen : PlayerTraits -> Location
 keepOnScreen { dim, pos } = 

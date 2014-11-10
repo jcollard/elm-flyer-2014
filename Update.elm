@@ -13,7 +13,7 @@ update : RealWorld -> Input -> State -> State
 update rw input state = 
     let player = Debug.watch "Player" (state.player) in
     case input of
-      Passive t -> (cleanUp << Physics.physics t) { state | time <- state.time + 1 }
+      Passive t -> (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
       otherwise ->  
         let state' = handleFire input state
             player' = Player.move state'.player input

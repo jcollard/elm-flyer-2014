@@ -26,7 +26,7 @@ backdrop start offset t =
 background : Time -> Form
 background t = 
     let t' = t*5
-    in group [backdrop 1500 0 t', backdrop 2500 3000 t']
+    in group [backdrop 1500 0 t', backdrop 2501 3000 t']
 
 ui : RealWorld -> [Form]
 ui rw =

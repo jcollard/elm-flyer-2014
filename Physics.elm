@@ -9,7 +9,7 @@ pos = Location
 
 physics : Time -> State.State -> State.State
 physics dt state = 
-    let t = dt/16
+    let t = dt/17
         player' = updateObject t state.player
         projectiles' = map (updateObject t) state.projectiles
         enemies' =  map (updateObject t) state.enemies
