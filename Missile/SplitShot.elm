@@ -3,6 +3,7 @@ module Missile.SplitShot where
 import Util (..)
 import Object (..)
 import Missile (..)
+import PowerUp (PowerUp, defaultPowerUp, powerup)
 import Debug
 
 
@@ -14,6 +15,9 @@ height = 15
 
 img : Form
 img = toForm (image width width "../assets/standard-missile.gif")
+
+powerupImage : Form
+powerupImage = toForm (image width width "../assets/split-shot-power-up.png")
 
 fire : Location -> [Missile]
 fire pos = 
@@ -39,3 +43,9 @@ passive { x, y } modifier dt traits =
          time <- t'
        , pos <- pos'                         
        }
+
+splitshotPowerUp : PowerUp
+splitshotPowerUp = 
+    powerup { defaultPowerUp | 
+              powerup <- fire
+            , form <- powerupImage }
