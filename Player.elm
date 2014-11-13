@@ -29,6 +29,12 @@ type Player = Object AdditionalTraits {}
 playerImage : Form
 playerImage = toForm (image 100 57 "assets/space-ship.gif")
 
+spawnImage : Form
+spawnImage = toForm (image 100 57 "assets/spawn-ship.gif")
+
+hiddenImage : Form
+hiddenImage = toForm (image 0 0 "assets/spawn-ship.gif")
+
 player : Player
 player = 
     let p = object { pos = {x = -400, y = 0}
@@ -75,19 +81,28 @@ move player input =
 
 fire : Player -> [Missile]
 fire { traits } = 
-    if traits.cooldown > 0 then [] else traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
+    if | (traits.cooldown > 0 ||
+          traits.time < 0     ||
+          traits.lives < 1      )-> [] 
+       | otherwise -> traits.fire { x = traits.pos.x + traits.dim.width/2, y = traits.pos.y }
 
 
 passive : Time -> PlayerTraits -> PlayerTraits
 passive dt traits = 
     let traits' = { traits | pos <- { x = traits.pos.x + traits.vel.x*dt, 
                              y = traits.pos.y + traits.vel.y*dt }}
+        form' = if | traits.lives < 1 -> hiddenImage
+                   | traits.time < -100 -> hiddenImage
+                   | traits.time < 0 -> spawnImage
+                   | otherwise -> playerImage
     in { traits' | 
          vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y }
        , pos <- keepOnScreen traits'
        , cooldown <- max 0 (traits.cooldown - dt)
-       ,time <- traits.time + dt
+       , time <- traits.time + dt
+       , form <- form'
        }
+
 keepOnScreen : PlayerTraits -> Location
 keepOnScreen { dim, pos } = 
     let leftEdge = pos.x - dim.width/8
