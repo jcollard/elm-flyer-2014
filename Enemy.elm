@@ -22,9 +22,9 @@ enemy {pos, dim, form, health} =
 
 checkDestroyed : EnemyTraits -> EnemyTraits
 checkDestroyed traits =
-    if | traits.health > 0 -> traits
+    if | traits.health <= 0 -> { traits | destroyed <- True }
        | outOfBounds traits -> { traits | destroyed <- True }
-       | otherwise -> { traits | destroyed <- True }
+       | otherwise -> traits
           
 
 

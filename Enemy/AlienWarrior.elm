@@ -13,7 +13,7 @@ img = toForm (image width height "../assets/alien-warrior.gif")
 spawn : Location -> Enemy
 spawn pos = 
     let traits = { pos = pos,
-                   health = 10,
+                   health = 1,
                    dim = { width = width, height = height },
                    form = img }
         warrior = enemy traits

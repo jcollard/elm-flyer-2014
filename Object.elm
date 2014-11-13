@@ -58,6 +58,6 @@ defaultDestroyedSFX : Traits a -> SFX
 defaultDestroyedSFX { pos } =
     { pos = pos
     , time = 0
-    , duration = 200
-    , sfx = (\t -> circle t |> filled red |> move (pos.x, pos.y))
+    , duration = 100
+    , sfx = (\t -> circle t |> filled red)
     }

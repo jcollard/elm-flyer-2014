@@ -1,6 +1,6 @@
 module Update where
 
-import SFX (..)
+import SFX (SFX)
 import Object (..)
 import Playground (..)
 import Playground.Input (..)
@@ -50,7 +50,11 @@ cleanUp : State -> State
 cleanUp state =
     let (pps, newSFX) = cleanObjects state.projectiles
         (objs, newSFX') = cleanObjects state.enemies
-    in {state | projectiles <- pps, enemies <- objs}
+        sfxs' = filter cleanSFX (newSFX ++ newSFX' ++ state.sfxs)
+    in {state | projectiles <- pps, enemies <- objs, sfxs <- sfxs'}
+
+cleanSFX : SFX -> Bool
+cleanSFX { time, duration } = time < duration
 
 cleanObjects : [Object a b] -> ([Object a b], [SFX])
 cleanObjects = cleanObjects' ([], [])

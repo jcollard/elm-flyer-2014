@@ -1,5 +1,7 @@
 module Physics where
 
+import SFX
+
 import Util (..)
 import Object (..)
 import State
@@ -19,9 +21,11 @@ physics dt state =
         projectiles' = map (tick t) state.projectiles
         enemies' =  map (tick t) state.enemies
         (projectiles'', enemies'') = checkHits projectiles' enemies'
+        sfxs' = map (SFX.tick dt) state.sfxs
     in {state | player <- player', 
                 projectiles <- projectiles'', 
-                enemies <- enemies''}
+                enemies <- enemies'',
+                sfxs <- sfxs'}
 
 checkHits : [Missile] -> [Enemy] -> ([Missile], [Enemy])
 checkHits = checkHits' []

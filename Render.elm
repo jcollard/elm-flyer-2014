@@ -1,5 +1,6 @@
 module Render where
 
+import SFX
 import Util (..)
 import Playground (..)
 import Playground.Input (..)
@@ -12,6 +13,7 @@ render rw state = (background state.time) ::
                    renderObject state.player :: 
                   (map renderObject state.projectiles) ++ 
                   (map renderObject state.enemies) ++ 
+                  (map SFX.render state.sfxs) ++
                   (ui rw)
 
 renderObject : Object a b -> Form
