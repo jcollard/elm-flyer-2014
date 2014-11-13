@@ -46,17 +46,7 @@ handleFire input state =
 
 cleanUp : State -> State
 cleanUp state =
-    let pps = filter (not << outOfBounds) state.projectiles
-        objs = filter (not << outOfBounds) state.enemies
+    let pps = filter (\p -> not p.traits.destroyed) state.projectiles
+        objs = filter (\e -> not e.traits.destroyed) state.enemies
     in {state | projectiles <- pps, enemies <- objs}
 
-outOfBounds : Object a b -> Bool
-outOfBounds { traits } =
-    let objLeft = traits.pos.x - (traits.dim.width / 2)
-        objRight = traits.pos.x + (traits.dim.width / 2)
-        objTop = traits.pos.y + (traits.dim.height / 2)
-        objBot = traits.pos.y - (traits.dim.height / 2)
-    in (objRight < screenBounds.left - 200) 
-       || (objLeft > screenBounds.right + 1000) 
-       || (objBot > screenBounds.top + 200) 
-       || (objTop < screenBounds.bottom - 200)

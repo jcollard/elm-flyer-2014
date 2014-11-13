@@ -16,7 +16,7 @@ fire pos =
                           , damage <- 5
                           , cooldown <- 150 }
         traits = missile.traits
-        create_missile t = { missile | passive <- passive pos t }
+        create_missile t = { missile | passive <- passiveBuilder <| passive pos t }
     in map create_missile [0..19]
 
 passive : Location -> Time -> Time -> MissileTraits -> MissileTraits

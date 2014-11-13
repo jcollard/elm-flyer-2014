@@ -1,5 +1,7 @@
 module Missile where
 
+import State.ScreenBounds (screenBounds)
+
 import Object (..)
 
 type AdditionalTraits = { damage : Int,
@@ -21,4 +23,26 @@ defaultTraits = { pos = { x = 0, y = 0 }
                 , damage = 5
                 , cooldown = 15
                 , destroyed = False }
-                  
+
+passiveBuilder : (Time -> MissileTraits -> MissileTraits) -> Time -> MissileTraits -> MissileTraits
+passiveBuilder f dt traits = 
+    let traits' = f dt traits
+    in checkDestroyed traits'
+
+
+checkDestroyed : MissileTraits -> MissileTraits
+checkDestroyed traits =
+    if | outOfBounds traits -> { traits | destroyed <- True }
+       | otherwise -> traits          
+
+
+outOfBounds : MissileTraits -> Bool
+outOfBounds traits  =
+    let objLeft = traits.pos.x - (traits.dim.width / 2)
+        objRight = traits.pos.x + (traits.dim.width / 2)
+        objTop = traits.pos.y + (traits.dim.height / 2)
+        objBot = traits.pos.y - (traits.dim.height / 2)
+    in (objRight < screenBounds.left - 100) 
+       || (objLeft > screenBounds.right + 100) 
+       || (objBot > screenBounds.top + 500) 
+       || (objTop < screenBounds.bottom - 500)                  

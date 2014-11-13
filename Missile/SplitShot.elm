@@ -21,9 +21,10 @@ fire pos =
                           , pos <- pos
                           , form <- img
                           , damage <- 5
-                          , cooldown <- 15 }
-    in [{ missile | passive <- passive pos 1 },
-        { missile | passive <- passive pos (-1) }]
+                          , cooldown <- 15 
+                          }
+    in [{ missile | passive <- passiveBuilder <| passive pos 1 },
+        { missile | passive <- passiveBuilder <| passive pos (-1) }]
 
 passive : Location -> Float -> Time -> MissileTraits -> MissileTraits
 passive { x, y } modifier dt traits = 
@@ -33,6 +34,7 @@ passive { x, y } modifier dt traits =
         x' = x + (t/2)^2
         y' = if t < 15 then y else y + modifier * (t - 15)^(1.4)
         pos' = { x = x', y = y' }
-    in { traits | time <- t', 
-                  pos <- pos'                         
+    in { traits |
+         time <- t'
+       , pos <- pos'                         
        }

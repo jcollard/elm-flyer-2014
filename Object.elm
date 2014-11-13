@@ -1,5 +1,7 @@
 module Object where
 
+import State.ScreenBounds (screenBounds)
+
 type Location = { x : Float, y : Float }
 type Velocity = { x : Float, y : Float }
 type Dimension = { width : Float, height : Float }
@@ -32,9 +34,9 @@ intersect : Object a b -> Object c d -> Bool
 intersect o0 o1 =
     let box0 = boundingBox o0
         box1 = boundingBox o1
-    in not (box0.right < box1.left &&
-            box0.left > box1.right &&
-            box0.top < box1.bottom &&
+    in not (box0.right < box1.left ||
+            box0.left > box1.right ||
+            box0.top < box1.bottom ||
             box0.bottom > box1.top)
 
 tick : Time -> Object a b -> Object a b
