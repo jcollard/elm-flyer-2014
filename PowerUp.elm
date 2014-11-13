@@ -12,7 +12,7 @@ type PowerUp = Object AdditionalTraits {}
 
 defaultPowerUp : PowerUpTraits
 defaultPowerUp = { destroyed = False
-                 , dim = { width = 25, height = 25 }
+                 , dim = { width = 42, height = 42 }
                  , pos = { x = 0, y = 0 }
                  , form = circle 0 |> filled red
                  , powerup = (\ l -> [] ) }

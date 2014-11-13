@@ -8,16 +8,16 @@ import Debug
 
 
 width : number
-width = 15
+width = 25
 
 height : number
-height = 15
+height = 25
 
 img : Form
 img = toForm (image width width "../assets/standard-missile.gif")
 
 powerupImage : Form
-powerupImage = toForm (image width width "../assets/split-shot-power-up.png")
+powerupImage = toForm (image 42 42 "../assets/split-shot-power-up.png")
 
 fire : Location -> [Missile]
 fire pos = 

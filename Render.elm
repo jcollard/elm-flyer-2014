@@ -13,6 +13,7 @@ render rw state = [ background state.time
                   , renderObject state.player
                   , group <| map renderObject state.projectiles
                   , group <| map renderObject state.enemies
+                  , group <| map renderObject state.powerups
                   , group <| map SFX.render state.sfxs
                   , group <| ui rw
                   , group <| menu state
