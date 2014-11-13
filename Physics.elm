@@ -33,7 +33,7 @@ checkHits = checkHits' []
 checkHits' : [Missile] -> [Missile] -> [Enemy] -> ([Missile], [Enemy])
 checkHits' acc_ms ms es =
     case ms of
-      [] -> (acc_ms, es)
+      [] -> (acc_ms, reverse es)
       (m::ms') ->
           if | m.traits.destroyed -> checkHits' (m::acc_ms) ms' es
              | otherwise ->
