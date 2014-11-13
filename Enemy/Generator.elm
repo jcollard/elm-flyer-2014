@@ -64,7 +64,7 @@ movement : Int -> RndGen -> (PassiveFunction, RndGen)
 movement wave g =
     let (p, g') = float g
     in if | p <= 1 -> 
-              let (speed, g'') = floatRange (1, 10) g'
+              let (speed, g'') = floatRange (3, 10) g'
               in (straight speed, g'')
           | otherwise -> (straight 5, g')
 
