@@ -22,5 +22,5 @@ passive : Time -> EnemyTraits -> EnemyTraits
 passive dt traits = 
     let t = traits.time
         t' = t + dt
-        vel' = {x = -3 + 3 * ( sin << degrees <| 3*t), y = 3 * (cos << degrees <| t)}
+        vel' = {x = -3 + 6* ( sin << degrees <| 3*t), y = 3 * (cos << degrees <| t)}
     in { traits | time <- t', vel <- vel' }

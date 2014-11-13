@@ -18,8 +18,8 @@ initialState = { player = player
                , projectiles = []
                , enemies = [ AlienWarrior.spawn {x = 550, y = 0} 
                            , AlienWarrior.spawn {x = 650, y = 100}
-                           , AlienWarrior.spawn {x = 650, y = -100}
-                           , AlienWarrior.spawn {x = 750, y = 0}
+                           , AlienWarrior.spawn {x = 1000, y = -100}
+--                           , AlienWarrior.spawn {x = 750, y = 0}
                            ]
                , time = 0 }
 
