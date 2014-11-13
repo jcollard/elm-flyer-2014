@@ -1,17 +1,18 @@
 module State where
 
-import State.ScreenBounds (..) 
-import State.ScreenBounds
+import Util (..)
+import SFX (..)
 import Object (..)
 import Enemy (..)
 import Missile (..)
 import Player (..)
 import Enemy.AlienWarrior as AlienWarrior
 
-type State = { player : Player,
-               projectiles : [Missile],
-               enemies : [Enemy],
-               time : Time }
+type State = { player : Player
+             , projectiles : [Missile]
+             , enemies : [Enemy]
+             , time : Time
+             , sfxs : [SFX] }
 
 initialState : State
 initialState = { player = player 
@@ -19,10 +20,7 @@ initialState = { player = player
                , enemies = [ AlienWarrior.spawn {x = 550, y = 0} 
                            , AlienWarrior.spawn {x = 650, y = 100}
                            , AlienWarrior.spawn {x = 1000, y = -100}
---                           , AlienWarrior.spawn {x = 750, y = 0}
                            ]
+               , sfxs = []
                , time = 0 }
-
-screenBounds = State.ScreenBounds.screenBounds
-
 

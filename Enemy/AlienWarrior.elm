@@ -1,5 +1,6 @@
 module Enemy.AlienWarrior where
 
+import Util (..)
 import Object (..)
 import Enemy (..)
 

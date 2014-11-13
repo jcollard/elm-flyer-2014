@@ -1,8 +1,9 @@
 module Render where
 
+import Util (..)
 import Playground (..)
 import Playground.Input (..)
-import State (screenBounds, State)
+import State (State)
 import Object (..)
 import Debug 
 

@@ -1,6 +1,7 @@
 module Player where
 
 import Playground.Input (..)
+import Util (..)
 import Object (..)
 
 import Missile (Missile)
@@ -12,7 +13,6 @@ import Missile.Rapid
 import Missile.Nuke
 
 import Keyboard.Keys as Keys
-import State.ScreenBounds (screenBounds)
 
 type AdditionalTraits = { cooldown : Time, 
                           fire : Location -> [Missile],

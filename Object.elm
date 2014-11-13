@@ -1,19 +1,18 @@
 module Object where
 
-import State.ScreenBounds (screenBounds)
-
-type Location = { x : Float, y : Float }
-type Velocity = { x : Float, y : Float }
-type Dimension = { width : Float, height : Float }
+import Util (..)
+import SFX (..)
 
 type Traits a = { a | pos : Location,
                       dim : Dimension,
                       form : Form,
                       destroyed : Bool }
 
-type Object a b = { b | traits : Traits a,
-                        passive : Time -> Traits a -> Traits a,
-                        render : Traits a -> Form }
+type Object a b = { b | 
+                    traits : Traits a
+                  , passive : Time -> Traits a -> Traits a
+                  , render : Traits a -> Form
+                  , destroyedSFX : Traits a -> SFX }
 
 type BoundingBox = { left : Float
                    , right : Float
@@ -46,10 +45,19 @@ object : Traits a -> Object a {}
 object traits =
     { traits = traits,
       passive = passive,
-      render = render }
+      render = render,
+      destroyedSFX = defaultDestroyedSFX }
 
 passive : Time -> Traits a -> Traits a
 passive t ts = ts
 
 render : Traits a -> Form
 render { pos, form} = move (pos.x, pos.y) form
+
+defaultDestroyedSFX : Traits a -> SFX
+defaultDestroyedSFX { pos } =
+    { pos = pos
+    , time = 0
+    , duration = 200
+    , sfx = (\t -> circle t |> filled red |> move (pos.x, pos.y))
+    }

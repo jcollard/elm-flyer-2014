@@ -1,5 +1,6 @@
 module Missile.Rapid where
 
+import Util (..)
 import Object (..)
 import Missile (..)
 import Debug

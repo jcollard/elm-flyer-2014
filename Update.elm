@@ -1,4 +1,6 @@
 module Update where
+
+import SFX (..)
 import Object (..)
 import Playground (..)
 import Playground.Input (..)
@@ -46,7 +48,19 @@ handleFire input state =
 
 cleanUp : State -> State
 cleanUp state =
-    let pps = filter (\p -> not p.traits.destroyed) state.projectiles
-        objs = filter (\e -> not e.traits.destroyed) state.enemies
+    let (pps, newSFX) = cleanObjects state.projectiles
+        (objs, newSFX') = cleanObjects state.enemies
     in {state | projectiles <- pps, enemies <- objs}
 
+cleanObjects : [Object a b] -> ([Object a b], [SFX])
+cleanObjects = cleanObjects' ([], [])
+
+cleanObjects' : ([Object a b], [SFX]) -> [Object a b] -> ([Object a b], [SFX])
+cleanObjects' (acc_os, sfxs) os =
+    case os of
+      [] -> (acc_os, sfxs)
+      (o::os') -> if | o.traits.destroyed -> 
+                         let sfx = o.destroyedSFX o.traits
+                         in cleanObjects' (acc_os, sfx::sfxs) os'
+                     | otherwise -> cleanObjects' (o::acc_os, sfxs) os'
+         

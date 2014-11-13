@@ -1,7 +1,6 @@
 module Enemy where
 
-import State.ScreenBounds (screenBounds)
-
+import Util (..)
 import Object (..)
 
 type AdditionalTraits = { health : Int,

@@ -1,5 +1,6 @@
 module Physics where
 
+import Util (..)
 import Object (..)
 import State
 
