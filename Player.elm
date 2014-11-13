@@ -53,6 +53,14 @@ move player input =
                             {traits | vel <- { x = traits.vel.x, y = acceleration + traits.vel.y } }
                           | k `Keys.equals` Keys.s ->
                             {traits | vel <- { x = traits.vel.x, y = traits.vel.y - acceleration } }
+                          | k `Keys.equals` Keys.one ->
+                            { traits | fire <- Missile.SplitShot.fire }
+                          | k `Keys.equals` Keys.two ->
+                            { traits | fire <- Missile.Rapid.fire }
+                          | k `Keys.equals` Keys.three ->
+                            { traits | fire <- Missile.Nuke.fire }
+                          | k `Keys.equals` Keys.four ->
+                            { traits | fire <- Missile.Standard.fire }
                           | otherwise -> traits
               otherwise -> traits
     in { player | traits <- traits' }
