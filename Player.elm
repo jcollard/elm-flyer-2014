@@ -60,12 +60,12 @@ player =
 
 destroyedSFX : Traits a -> SFX
 destroyedSFX { pos } =
-    let frames = Array.initialize 18 (\f -> toForm (image 200 200 ("assets/explosion/" ++ show f ++ ".png")))
+    let frames = Array.initialize 19 (\f -> toForm (image 200 200 ("assets/explosion/" ++ show f ++ ".png")))
     in
        { pos = pos
        , time = 0
        , duration = 1000
-       , sfx = (\t f -> Array.getOrFail (min 17 f) frames)
+       , sfx = (\t f -> Array.getOrFail (min 18 f) frames)
        , frame = 0
        }
 
