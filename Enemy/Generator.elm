@@ -19,18 +19,18 @@ theGenerator n = { generator = generator n,
 nextWave : Generator -> ([Enemy], Generator)
 nextWave g = 
     let (num_enemies, g') = int32Range (g.wave, 5*g.wave) g.generator
-        (enemies, g'') = createEnemies g.wave num_enemies g'
+        (enemies, g'') = createEnemies (toFloat g.wave) num_enemies g'
     in (enemies, {g | generator <- g'', wave <- g.wave + 1})
 
-createEnemies : Int -> Int -> RndGen -> ([Enemy], RndGen)
+createEnemies : Float -> Int -> RndGen -> ([Enemy], RndGen)
 createEnemies = createEnemies' []
 
-createEnemies' : [Enemy] -> Int -> Int -> RndGen -> ([Enemy], RndGen)
+createEnemies' : [Enemy] -> Float -> Int -> RndGen -> ([Enemy], RndGen)
 createEnemies' es wave num_enemies g = 
     if | (num_enemies <= 0) -> (es, g)
        | otherwise -> 
            let (p, g') = float g
-           in if | p <= 1 -> 
+           in if | p <= 1 - (max (wave-1) 0) * 0.05 -> 
                      let (e, g') = single wave g
                      in createEnemies' (e::es) wave (num_enemies - 1) g'
                  | otherwise ->
@@ -40,11 +40,11 @@ createEnemies' es wave num_enemies g =
 
 -- Groups
 
-single : Int -> RndGen -> (Enemy, RndGen)
+single : Float -> RndGen -> (Enemy, RndGen)
 single wave g = 
     let 
-        (x_off, g') = floatRange (100, 1000) g
-        (y_off, g'') = floatRange (-100, 100) g'
+        (x_off, g') = floatRange (100, 200*wave) g
+        (y_off, g'') = floatRange (-200, 200) g'
         pos = { x = screenBounds.right + x_off, y = 0 + y_off }
         (passive, g''') = movement wave g''
         ctor = AlienWarrior.spawn
@@ -52,21 +52,36 @@ single wave g =
         enemy' = { enemy | passive <- passive pos }
     in (enemy', g''')
 
-train : Int -> Int -> RndGen -> ([Enemy], RndGen)
-train wave n g = ([], g)
+train : Float -> Int -> RndGen -> ([Enemy], RndGen)
+train wave n g = 
+    let (size, g') = int32Range (5, (min 25 n)) g
+        (x_off, g'') = floatRange (100, 200*wave) g'
+        (y_off, g''') = floatRange (-200, 200) g''
+        (space, g'''') = floatRange (10, 20) g'''
+        pos = { x = screenBounds.right + x_off, y = 0 + y_off }
+        (passive, g''''') = movement wave g''''
+        ctor = AlienWarrior.spawn
+        enemy = ctor pos
+        enemy' = { enemy | passive <- passive pos }
+        traits' = enemy'.traits
+        create n = { enemy' | traits <- { traits' | time <- space * toFloat -n } }
+        enemies = map create [0..size]
+    in (enemies, g''''')
+
                          
          
 -- Movements
 
 type PassiveFunction = Location -> Time -> EnemyTraits -> EnemyTraits
 
-movement : Int -> RndGen -> (PassiveFunction, RndGen)
+movement : Float -> RndGen -> (PassiveFunction, RndGen)
 movement wave g =
     let (p, g') = float g
-    in if | p <= 1 -> 
+    in if | p <= 1.0 - ((wave - 1) * 0.05) -> 
               let (speed, g'') = floatRange (3, 10) g'
               in (straight speed, g'')
-          | otherwise -> (straight 5, g')
+          | p <= 1.0 - (max (wave - 5) 0) * 0.05 -> basicSine g'
+          | otherwise -> oscillate g'
 
 straight : Float -> Location -> Time -> EnemyTraits -> EnemyTraits
 straight speed {x, y} dt traits =
@@ -79,3 +94,36 @@ straight speed {x, y} dt traits =
                              time <- t'
                            , pos <- pos'
                            }
+
+basicSine : RndGen -> (PassiveFunction, RndGen)
+basicSine g =
+    let (leftPull, g') = floatRange (3, 10) g
+        (amp, g'') = floatRange (30, 200) g'
+        (per, g''') = floatRange (1, 3) g''
+        passive { x , y } dt traits =
+            let t = traits.time
+                t' = t + dt
+                x' = x - leftPull*t
+                y' = y + amp * sin( degrees <| per * t)
+                pos' = { x = x', y = y' }
+            in checkDestroyed { traits | 
+                                time <- t'
+                              , pos <- pos'
+                              }
+    in (passive, g''')
+
+oscillate : RndGen -> (PassiveFunction, RndGen)
+oscillate g =
+    let (leftPull, g') = floatRange (3, 10) g
+        (rightPull, g'') = floatRange (0, 10*leftPull) g'
+        (pullP, g''') = floatRange (1, 2) g''
+        (amp, g'''') = floatRange (30, 200) g'''
+        (per, g''''') = floatRange (1, 3) g''''
+        passive { x, y } dt traits =
+            let t = traits.time
+                t' = t + dt
+                x' = x - leftPull*t + rightPull*sin( degrees <| pullP * t)
+                y' = y + amp * cos(degrees <| per * t)
+                pos' = { x = x', y = y' }
+            in checkDestroyed { traits | time <- t', pos <- pos' }
+    in (passive, g''''')
