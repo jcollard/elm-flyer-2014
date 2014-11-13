@@ -16,7 +16,6 @@ import Physics
 
 update : RealWorld -> Input -> State -> State
 update rw input state = 
-    let state' = Debug.watch "State" state in
     case input of
       Passive t ->
           if | state.paused -> state

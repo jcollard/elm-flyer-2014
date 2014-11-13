@@ -16,6 +16,8 @@ import Missile (Missile)
 
 import Player (Player)
 
+import Debug
+
 pos = Location
 
 physics : Time -> State.State -> State.State
@@ -23,17 +25,37 @@ physics dt state =
     let t = dt/17
         player' = tick t (checkPlayerHit state.player state.enemies)
         powerups' = map (tick t) state.powerups
+        (player'', powerups'') = checkPlayerPowerUp player' powerups'
         projectiles' = map (tick t) state.projectiles
         enemies' =  map (tick t) state.enemies
-        (projectiles'', enemies'', powerups'') = checkHits projectiles' enemies'
+        (projectiles'', enemies'', powerups''') = checkHits projectiles' enemies'
         sfxs' = map (SFX.tick dt) state.sfxs
     in {state | 
-        player <- player'
+        player <- player''
        , projectiles <- projectiles''
        , enemies <- enemies''
        , sfxs <- sfxs'
-       , powerups <- powerups' ++ powerups''
+       , powerups <- powerups'' ++ powerups'''
        }
+
+checkPlayerPowerUp : Player -> [PowerUp] -> (Player, [PowerUp])
+checkPlayerPowerUp = checkPlayerPowerUp' []
+
+checkPlayerPowerUp' : [PowerUp] -> Player -> [PowerUp] -> (Player, [PowerUp])
+checkPlayerPowerUp' ps' p ps =
+    if | p.traits.time < 0 -> (p, ps)
+       | otherwise -> 
+    case ps of
+      [] -> (p, reverse ps')
+      (powerup::rest) -> 
+          if | not <| intersect p powerup -> checkPlayerPowerUp' (powerup::ps') p rest
+             | otherwise -> 
+                let traits = p.traits
+                    p' = { p | 
+                           traits <- { traits |
+                                       fire <- powerup.traits.powerup } }
+                in (p', ps' ++ rest)
+      
 
 checkPlayerHit : Player -> [Enemy] -> Player
 checkPlayerHit p es =
@@ -66,9 +88,9 @@ checkHits' ps acc_ms ms es =
                      | hit -> 
                          let mtraits = m.traits
                              m' = { m | traits <- { mtraits | destroyed <- True } }
-                         in checkHits' ps' (m'::acc_ms) ms' es'
+                         in checkHits' (ps' ++ ps) (m'::acc_ms) ms' es'
                      -- Otherwise keep it
-                     | otherwise -> checkHits' ps' (m::acc_ms) ms' es'
+                     | otherwise -> checkHits' (ps' ++ ps) (m::acc_ms) ms' es'
 
 checkHitEnemy : Missile -> [Enemy] -> (Bool, [Enemy], [PowerUp])
 checkHitEnemy = checkHitEnemy' []
@@ -86,6 +108,7 @@ checkHitEnemy' acc m es =
                     | otherwise -> 
                         let traits = e.traits
                             e' = { e | traits <- { traits | health <- traits.health - m.traits.damage } }
-                            ps = if | e'.traits.health < 1 -> traits.loot traits.pos
-                                    | otherwise -> []
+                            _ = Debug.watch "Hit" e'
+                            ps = if | e'.traits.health < 1 -> Debug.watch "Loot" (traits.loot traits.pos)
+                                    | otherwise -> Debug.watch "Loot" []
                         in (True, es' ++ (e' :: acc), ps)

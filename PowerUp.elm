@@ -25,5 +25,5 @@ powerup traits =
 passive : Time -> PowerUpTraits -> PowerUpTraits
 passive t traits =
     { traits |
-      pos <- { x = traits.pos.x - 3*t, y = 0 } 
+      pos <- { x = traits.pos.x - 3*t, y = traits.pos.y } 
     }

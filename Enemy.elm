@@ -2,9 +2,13 @@ module Enemy where
 
 import Util (..)
 import Object (..)
+import PowerUp (PowerUp)
+import Missile.SplitShot (splitshotPowerUp)
 
-type AdditionalTraits = { health : Int,
-                          time : Time }
+type AdditionalTraits = { health : Int
+                        , time : Time
+                        , loot : Location -> [PowerUp]
+                        }
 
 type EnemyTraits = Traits AdditionalTraits
 
@@ -12,12 +16,20 @@ type Enemy = Object AdditionalTraits {}
 
 enemy : { pos : Location, dim : Dimension, form : Form, health : Int } -> Enemy
 enemy {pos, dim, form, health} =
-    let traits = { pos = pos,
-                   dim = dim,
-                   form = form,
-                   health = health,
-                   time = 0,
-                   destroyed = False }
+    let traits = { pos = pos
+                 , dim = dim
+                 , form = form
+                 , health = health
+                 , time = 0
+                 , destroyed = False
+                 , loot = (\ pos -> 
+                               let traits = splitshotPowerUp.traits
+                               in [{splitshotPowerUp |
+                                    traits <- { traits |
+                                                pos <- pos 
+                                              }
+                                   }])
+                 }
     in object traits
 
 checkDestroyed : EnemyTraits -> EnemyTraits

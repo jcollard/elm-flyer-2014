@@ -113,6 +113,8 @@ passive dt traits =
                 | otherwise -> traits.pos.x + traits.vel.x*dt
         y' = if | traits.time < -100 -> 0 
                 | otherwise -> traits.pos.y + traits.vel.y*dt
+        fire'  = if | traits.time < 0 -> Missile.Standard.fire
+                    | otherwise -> traits.fire
         traits' = { traits | pos <- { x = x', y = y' }}
         form' = if | traits.lives < 1 -> hiddenImage
                    | traits.time < -100 -> hiddenImage
@@ -124,6 +126,7 @@ passive dt traits =
        , cooldown <- max 0 (traits.cooldown - dt)
        , time <- traits.time + dt
        , form <- form'
+       , fire <- fire'
        }
 
 keepOnScreen : PlayerTraits -> Location
