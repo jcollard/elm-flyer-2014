@@ -28,7 +28,8 @@ update rw input state =
       _ ->  if | state.gameover -> handleGameOver state
                | otherwise -> 
                    let state' = handleFire input state
-                       player' = Player.move state'.player input
+                       player' = if | state.paused -> state'.player
+                                    | otherwise -> Player.move state'.player input
                    in { state' | player <- player' }
 
 handleGameOver : State -> State
