@@ -16,11 +16,13 @@ spawn pos =
                    dim = { width = width, height = height },
                    form = img }
         warrior = enemy traits
-    in { warrior | passive <- passive }
+    in { warrior | passive <- passive pos }
 
-passive : Time -> EnemyTraits -> EnemyTraits
-passive dt traits = 
+passive : Location -> Time -> EnemyTraits -> EnemyTraits
+passive { x, y } dt traits = 
     let t = traits.time
         t' = t + dt
-        vel' = {x = -3 + 6* ( sin << degrees <| 3*t), y = 3 * (cos << degrees <| t)}
-    in { traits | time <- t', vel <- vel' }
+        x' = x - 3*t + 200*sin( degrees <| 1.5*t)
+        y' = y + 150 * (cos << degrees <| 2*t)
+        pos' = { x = x', y = y' }
+    in { traits | time <- t', pos <- pos' }
