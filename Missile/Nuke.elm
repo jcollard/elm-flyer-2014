@@ -25,8 +25,8 @@ passive { x , y } modifier dt traits =
     let t = traits.time 
         t_mod = t - modifier
         t' = t + dt
-        x' = x + t_mod*5
-        y' = y + 100*sin(degrees <| 5*t_mod)
+        x' = x + (t_mod*5)
+        y' = y + t_mod*sin(degrees <| 5*t_mod)
         pos' = { x = x', y = y' }
         dim' = { width = max 0 t_mod, height = max 0 t_mod }
         form' = toForm (image (round dim'.width) (round dim'.height) "../assets/standard-missile.gif")
