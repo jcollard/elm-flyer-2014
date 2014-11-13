@@ -30,11 +30,9 @@ checkDestroyed traits =
 
 outOfBounds : EnemyTraits -> Bool
 outOfBounds traits  =
-    let objLeft = traits.pos.x - (traits.dim.width / 2)
-        objRight = traits.pos.x + (traits.dim.width / 2)
+    let objRight = traits.pos.x + (traits.dim.width / 2)
         objTop = traits.pos.y + (traits.dim.height / 2)
         objBot = traits.pos.y - (traits.dim.height / 2)
     in (objRight < screenBounds.left - 200) 
-       || (objLeft > screenBounds.right + 1000) 
        || (objBot > screenBounds.top + 200) 
        || (objTop < screenBounds.bottom - 200)
