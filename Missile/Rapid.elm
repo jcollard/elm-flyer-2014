@@ -7,10 +7,10 @@ import PowerUp
 import PowerUp (PowerUp, defaultPowerUp)
 
 width : number
-width = 5
+width = 10
 
 height : number
-height = 5
+height = 10
 
 img : Form
 img = toForm (image width width "../assets/standard-missile.gif")
@@ -22,14 +22,17 @@ fire pos =
                      , dim <- { width = width, height = height }
                      , form <- img
                      , damage <- 5
-                     , cooldown <- 0 }
-    in [{ m | passive <- passiveBuilder <| passive pos }]
+                     , cooldown <- 15 }
+        create_missile t = { m | passive <- passiveBuilder <| passive pos t }
+    in map create_missile [0..2]
 
-passive : Location -> Time -> MissileTraits -> MissileTraits
-passive { x, y } dt traits = 
+passive : Location -> Time -> Time -> MissileTraits -> MissileTraits
+passive { x, y } modifier dt traits = 
     let t = traits.time 
+        t_mod = t - modifier
         t' = t + dt
-        pos' = { x = x + (t/2)^(2), y = y }
+        x' = x + (t_mod/2)^2
+        pos' = { x = x', y = y }
     in { traits | time <- t', 
                   pos <- pos'
        }
