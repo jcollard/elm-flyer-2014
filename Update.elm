@@ -23,7 +23,7 @@ update rw input state =
              | otherwise ->
                let fps = Debug.watch "FPS" (1000 / t)
                    state' = (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
-                   state'' = checkWave state'
+                   state'' = checkWave state' 
                in state''
       _ ->  if | state.gameover -> handleGameOver state
                | otherwise -> 
@@ -51,7 +51,10 @@ checkWave state =
 handleFire : Input -> State -> State
 handleFire input state = 
            case input of
-             Tap k -> if | k `Keys.equals` Keys.space && state.menu -> { initialState | menu <- False }
+             Tap k -> if 
+                         | k `Keys.equals` Keys.enter -> { state | paused <- not state.paused }
+                         | state.paused -> state
+                         | k `Keys.equals` Keys.space && state.menu -> { initialState | menu <- False }
                          | k `Keys.equals` Keys.space -> 
                               let ps = Player.fire state.player
                               -- This is super annoying...
