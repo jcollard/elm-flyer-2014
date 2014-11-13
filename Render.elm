@@ -15,7 +15,23 @@ render rw state = [ background state.time
                   , group <| map renderObject state.enemies
                   , group <| map SFX.render state.sfxs
                   , group <| ui rw
+                  , group <| menu state
+                  , group <| paused state
                   ]
+
+pausedImage = toForm (image 1000 500 "assets/paused.png")
+menuImage = toForm (image 1000 500 "assets/menu.png")
+
+paused : State -> [Form]
+paused state =
+    if | state.menu -> []
+       | not state.paused -> []
+       | otherwise -> [pausedImage]
+
+menu : State -> [Form]
+menu state =
+    if | not state.menu -> []
+       | otherwise -> [menuImage]
 
 renderObject : Object a b -> Form
 renderObject { traits } = 

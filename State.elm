@@ -16,6 +16,8 @@ type State = { player : Player
              , sfxs : [SFX]
              , generator : Generator 
              , gameover : Bool
+             , menu : Bool
+             , paused : Bool
              }
 
 initialState : State
@@ -26,5 +28,7 @@ initialState = { player = player
                , time = 0
                , generator = theGenerator 42
                , gameover = False
+               , menu = True
+               , paused = False
                }
 

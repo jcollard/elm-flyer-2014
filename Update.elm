@@ -19,15 +19,17 @@ update rw input state =
     let state' = Debug.watch "State" state in
     case input of
       Passive t ->
-          let fps = Debug.watch "FPS" (1000 / t)
-              state' = (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
-              state'' = checkWave state'
-          in state''
-      otherwise ->  if state.gameover then state
-                    else 
-                        let state' = handleFire input state
-                            player' = Player.move state'.player input
-                        in { state' | player <- player' }
+          if | state.paused -> state
+             | otherwise ->
+               let fps = Debug.watch "FPS" (1000 / t)
+                   state' = (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
+                   state'' = checkWave state'
+               in state''
+      _ ->  if | state.gameover -> state
+               | otherwise -> 
+                   let state' = handleFire input state
+                       player' = Player.move state'.player input
+                   in { state' | player <- player' }
 
 checkWave : State -> State
 checkWave state =
@@ -42,24 +44,27 @@ checkWave state =
 
 handleFire : Input -> State -> State
 handleFire input state = 
-    case input of
-      Tap k -> if | k `Keys.equals` Keys.space -> 
-                    let ps = Player.fire state.player
-                        -- This is super annoying...
-                        -- It would be much beter if you could 
-                        -- do { player.traits | modifiers }
-                        -- but the parser can't figure it out
-                        player = state.player
-                        traits = player.traits
-                        cooldown' = if isEmpty ps 
-                                    then traits.cooldown
-                                    else (head ps).traits.cooldown
-                        traits' = { traits | cooldown <- cooldown' }
-                        player' = { player | traits <- traits' }
-                    in { state | projectiles <- ps ++ state.projectiles,
-                                 player <- player' }
-                  | otherwise -> state
-      otherwise -> state
+           case input of
+             Tap k -> if | k `Keys.equals` Keys.space && state.menu -> { initialState | menu <- False }
+                         | k `Keys.equals` Keys.space -> 
+                              let ps = Player.fire state.player
+                              -- This is super annoying...
+                              -- It would be much beter if you could 
+                              -- do { player.traits | modifiers }
+                              -- but the parser can't figure it out
+                                  player = state.player
+                                  traits = player.traits
+                                  cooldown' = if isEmpty ps 
+                                                 then traits.cooldown
+                                                 else (head ps).traits.cooldown
+                                  traits' = { traits | cooldown <- cooldown' }
+                                  player' = { player | traits <- traits' }
+                              in { state | 
+                                   projectiles <- ps ++ state.projectiles
+                                 , player <- player' 
+                                 }
+                         | otherwise -> state
+             _ -> state
 
 
 cleanUp : State -> State

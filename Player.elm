@@ -1,5 +1,6 @@
 module Player where
 
+import Array
 import Playground.Input (..)
 import Util (..)
 import Object (..)
@@ -59,11 +60,12 @@ player =
 
 destroyedSFX : Traits a -> SFX
 destroyedSFX { pos } =
+    let frames = Array.initialize 18 (\f -> toForm (image 200 200 ("assets/explosion/" ++ show f ++ ".png")))
+    in
        { pos = pos
        , time = 0
        , duration = 1000
-       , sfx = (\t f -> if | f > 17 -> circle 0 |> filled red 
-                           | otherwise -> toForm (image 200 200 ("assets/explosion/" ++ show f ++ ".png")))
+       , sfx = (\t f -> Array.getOrFail (min 17 f) frames)
        , frame = 0
        }
 
