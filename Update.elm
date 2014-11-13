@@ -23,10 +23,11 @@ update rw input state =
               state' = (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
               state'' = checkWave state'
           in state''
-      otherwise ->  
-        let state' = handleFire input state
-            player' = Player.move state'.player input
-        in { state' | player <- player' }
+      otherwise ->  if state.gameover then state
+                    else 
+                        let state' = handleFire input state
+                            player' = Player.move state'.player input
+                        in { state' | player <- player' }
 
 checkWave : State -> State
 checkWave state =
