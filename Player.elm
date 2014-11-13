@@ -14,7 +14,9 @@ import Missile.Nuke
 import Keyboard.Keys as Keys
 import State.ScreenBounds (screenBounds)
 
-type AdditionalTraits = { cooldown : Time, fire : Location -> [Missile] }
+type AdditionalTraits = { cooldown : Time, 
+                          fire : Location -> [Missile],
+                          vel : Velocity }
 
 type PlayerTraits = Traits AdditionalTraits
 
@@ -71,10 +73,12 @@ fire { traits } =
 
 
 passive : Time -> PlayerTraits -> PlayerTraits
-passive dt traits = { traits | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
-                               pos <- keepOnScreen traits,
-                               cooldown <- max 0 (traits.cooldown - dt) }
-
+passive dt traits = 
+    let traits' = { traits | pos <- { x = traits.pos.x + traits.vel.x*dt, 
+                             y = traits.pos.y + traits.vel.y*dt }}
+    in { traits' | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
+                   pos <- keepOnScreen traits',
+                   cooldown <- max 0 (traits.cooldown - dt) }
 keepOnScreen : PlayerTraits -> Location
 keepOnScreen { dim, pos } = 
     let leftEdge = pos.x - dim.width/8

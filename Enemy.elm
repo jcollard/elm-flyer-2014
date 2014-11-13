@@ -15,7 +15,6 @@ enemy {pos, dim, form, health} =
                    dim = dim,
                    form = form,
                    health = health,
-                   vel = { x = 0, y = 0 },
                    time = 0 }
     in object traits
           

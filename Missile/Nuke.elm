@@ -11,7 +11,6 @@ fire : Location -> [Missile]
 fire pos = 
     let missile =  object { pos = pos,
                             dim = { width = 0, height = 0 },
-                            vel = { x = 0, y = 0 },
                             form = img,
                             time = 0,
                             damage = 5,
