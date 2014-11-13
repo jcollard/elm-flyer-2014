@@ -18,7 +18,19 @@ render rw state = [ background state.time
                   , group <| menu state
                   , group <| paused state
                   , group <| gameover state
+                  , group <| livesRemaining state
                   ]
+
+liveImage = toForm (image 28 50 "assets/space-ship-vert.png")
+
+livesRemaining : State -> [Form]
+livesRemaining state =
+    let lives = state.player.traits.lives
+    in if | lives < 1 -> []
+       | otherwise ->
+           let pos = (-450, -200)
+               form n = move pos << move (n*30, 0) <| liveImage
+           in map form [0..(lives-2)]
 
 pausedImage = toForm (image 1000 500 "assets/paused.png")
 menuImage = toForm (image 1000 500 "assets/menu.png")
