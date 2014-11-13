@@ -22,7 +22,7 @@ fire pos =
                      , pos <- pos
                      , form <- img
                      , damage <- 5
-                     , cooldown <- 10 }
+                     , cooldown <- 12 }
     in [{ m | passive <- passiveBuilder (passive pos) }]
 
 passive : Location -> Time -> MissileTraits -> MissileTraits
