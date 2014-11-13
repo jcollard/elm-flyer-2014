@@ -17,10 +17,18 @@ render rw state = [ background state.time
                   , group <| ui rw
                   , group <| menu state
                   , group <| paused state
+                  , group <| gameover state
                   ]
 
 pausedImage = toForm (image 1000 500 "assets/paused.png")
 menuImage = toForm (image 1000 500 "assets/menu.png")
+gameOverImage = toForm (image 1000 500 "assets/game_over.png")
+
+gameover : State -> [Form]
+gameover state =
+    if | state.menu -> []
+       | not state.gameover -> []
+       | otherwise -> [gameOverImage]
 
 paused : State -> [Form]
 paused state =

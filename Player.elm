@@ -76,13 +76,13 @@ move player input =
     let traits = player.traits
         traits' = 
             case input of
-              Key k -> if | k `Keys.equals` Keys.d ->
+              Key k -> if | k `Keys.equals` Keys.arrowRight ->
                            {traits | vel <- { x = acceleration + traits.vel.x, y = traits.vel.y } }
-                          | k `Keys.equals` Keys.a ->
+                          | k `Keys.equals` Keys.arrowLeft ->
                             {traits | vel <- { x = traits.vel.x - acceleration, y = traits.vel.y } }
-                          | k `Keys.equals` Keys.w ->
+                          | k `Keys.equals` Keys.arrowUp ->
                             {traits | vel <- { x = traits.vel.x, y = acceleration + traits.vel.y } }
-                          | k `Keys.equals` Keys.s ->
+                          | k `Keys.equals` Keys.arrowDown ->
                             {traits | vel <- { x = traits.vel.x, y = traits.vel.y - acceleration } }
                           | k `Keys.equals` Keys.one ->
                             { traits | fire <- Missile.SplitShot.fire }
@@ -108,8 +108,12 @@ fire { traits } =
 
 passive : Time -> PlayerTraits -> PlayerTraits
 passive dt traits = 
-    let traits' = { traits | pos <- { x = traits.pos.x + traits.vel.x*dt, 
-                             y = traits.pos.y + traits.vel.y*dt }}
+    let 
+        x' = if | traits.time < -100 -> -400
+                | otherwise -> traits.pos.x + traits.vel.x*dt
+        y' = if | traits.time < -100 -> 0 
+                | otherwise -> traits.pos.y + traits.vel.y*dt
+        traits' = { traits | pos <- { x = x', y = y' }}
         form' = if | traits.lives < 1 -> hiddenImage
                    | traits.time < -100 -> hiddenImage
                    | traits.time < 0 -> spawnImage
