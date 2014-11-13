@@ -7,6 +7,7 @@ import Playground (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 import State (..)
+import Player (Player)
 import Enemy.Generator (nextWave)
 import Debug
 
@@ -64,8 +65,28 @@ cleanUp : State -> State
 cleanUp state =
     let (pps, newSFX) = cleanObjects state.projectiles
         (objs, newSFX') = cleanObjects state.enemies
-        sfxs' = filter cleanSFX (newSFX ++ newSFX' ++ state.sfxs)
-    in {state | projectiles <- pps, enemies <- objs, sfxs <- sfxs'}
+        (player', newSFX''') = cleanPlayer state.player
+        sfxs' = filter cleanSFX (newSFX''' ++ newSFX ++ newSFX' ++ state.sfxs)
+        gameover' = player'.traits.lives < 1
+    in { state | 
+         projectiles <- pps
+       , enemies <- objs
+       , sfxs <- sfxs'
+       , player <- player'
+       , gameover <- gameover'
+       }
+
+cleanPlayer : Player -> (Player, [SFX])
+cleanPlayer p =
+    if | p.traits.destroyed -> 
+           let traits = p.traits
+               p' = { p | traits <- { traits |
+                                      destroyed <- False
+                                    , time <- -200
+                                    }
+                    }
+           in ( p' , [p.destroyedSFX p.traits] )
+       | otherwise -> (p, [])
 
 cleanSFX : SFX -> Bool
 cleanSFX { time, duration } = time < duration

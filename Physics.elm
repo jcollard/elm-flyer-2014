@@ -12,12 +12,14 @@ import Enemy (Enemy)
 import Missile
 import Missile (Missile)
 
+import Player (Player)
+
 pos = Location
 
 physics : Time -> State.State -> State.State
 physics dt state = 
     let t = dt/17
-        player' = tick t state.player
+        player' = tick t (checkPlayerHit state.player state.enemies)
         projectiles' = map (tick t) state.projectiles
         enemies' =  map (tick t) state.enemies
         (projectiles'', enemies'') = checkHits projectiles' enemies'
@@ -26,6 +28,20 @@ physics dt state =
                 projectiles <- projectiles'', 
                 enemies <- enemies'',
                 sfxs <- sfxs'}
+
+checkPlayerHit : Player -> [Enemy] -> Player
+checkPlayerHit p es =
+    case es of
+      [] -> p
+      (e::es') -> if 
+                     | p.traits.destroyed -> p
+                     | p.traits.time < 0 -> p
+                     | (intersect p e) -> 
+                         let traits = p.traits
+                         in { p | traits <- { traits |
+                                              destroyed <- True
+                                            , lives <- traits.lives - 1 } }
+                     | otherwise -> checkPlayerHit p es'
 
 checkHits : [Missile] -> [Enemy] -> ([Missile], [Enemy])
 checkHits = checkHits' []
@@ -56,7 +72,7 @@ checkHitEnemy' acc m es =
       [] -> (False, acc)
       (e::es') -> if 
                     -- If the Enemys health is less than 1, skip it
-                    | e.traits.health <= 0 -> checkHitEnemy' (e::acc) m es'
+                    | e.traits.health <= 0 -> checkHitEnemy' (e::acc) m es' 
                     -- If the Missile doesn't hit the enemy, continue down the list
                     | not <| intersect m e -> checkHitEnemy' (e::acc) m es'
                     -- If the Missle does hit the enemy, reduce the enemies health by the damage amount of the Missile.

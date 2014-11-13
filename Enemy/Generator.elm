@@ -18,7 +18,7 @@ theGenerator n = { generator = generator n,
 
 nextWave : Generator -> ([Enemy], Generator)
 nextWave g = 
-    let (num_enemies, g') = int32Range (g.wave, 5*g.wave) g.generator
+    let (num_enemies, g') = int32Range (g.wave, (min 200 5*g.wave)) g.generator
         (enemies, g'') = createEnemies (toFloat g.wave) num_enemies g'
     in (enemies, {g | generator <- g'', wave <- g.wave + 1})
 
@@ -30,7 +30,7 @@ createEnemies' es wave num_enemies g =
     if | (num_enemies <= 0) -> (es, g)
        | otherwise -> 
            let (p, g') = float g
-           in if | p <= 1 - (max (wave-1) 0) * 0.05 -> 
+           in if | p <= 0.01 -> 
                      let (e, g') = single wave g
                      in createEnemies' (e::es) wave (num_enemies - 1) g'
                  | otherwise ->
@@ -43,7 +43,7 @@ createEnemies' es wave num_enemies g =
 single : Float -> RndGen -> (Enemy, RndGen)
 single wave g = 
     let 
-        (x_off, g') = floatRange (100, 200*wave) g
+        (x_off, g') = floatRange (100, (min 2000 200*wave)) g
         (y_off, g'') = floatRange (-200, 200) g'
         pos = { x = screenBounds.right + x_off, y = 0 + y_off }
         (passive, g''') = movement wave g''

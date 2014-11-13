@@ -15,9 +15,12 @@ import Missile.Shield
 
 import Keyboard.Keys as Keys
 
-type AdditionalTraits = { cooldown : Time, 
-                          fire : Location -> [Missile],
-                          vel : Velocity }
+type AdditionalTraits = { cooldown : Time
+                        , fire : Location -> [Missile]
+                        , vel : Velocity
+                        , lives : Int
+                        , time : Time
+                        }
 
 type PlayerTraits = Traits AdditionalTraits
 
@@ -34,8 +37,10 @@ player =
                    , form = playerImage
 -- Quick debug by uncommenting one of these
                    , fire = Missile.Standard.fire
-                   ,  cooldown = 0
+                   , cooldown = 0
+                   , lives = 3
                    , destroyed = False
+                   , time = 0
                    }
     in { p | passive <- passive }
 
@@ -77,9 +82,12 @@ passive : Time -> PlayerTraits -> PlayerTraits
 passive dt traits = 
     let traits' = { traits | pos <- { x = traits.pos.x + traits.vel.x*dt, 
                              y = traits.pos.y + traits.vel.y*dt }}
-    in { traits' | vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y },
-                   pos <- keepOnScreen traits',
-                   cooldown <- max 0 (traits.cooldown - dt) }
+    in { traits' | 
+         vel <- { x = reduce traits.vel.x, y = reduce traits.vel.y }
+       , pos <- keepOnScreen traits'
+       , cooldown <- max 0 (traits.cooldown - dt)
+       ,time <- traits.time + dt
+       }
 keepOnScreen : PlayerTraits -> Location
 keepOnScreen { dim, pos } = 
     let leftEdge = pos.x - dim.width/8
