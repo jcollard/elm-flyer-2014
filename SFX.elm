@@ -5,10 +5,14 @@ import Util (..)
 type SFX = { pos : Location
            , time : Time
            , duration : Time
-           , sfx : Time -> Form }
+           , frame : Int
+           , sfx : Time -> Int -> Form }
 
 render : SFX -> Form
-render { pos, time, sfx } = sfx time |> move (pos.x, pos.y)
+render { pos, time, sfx, frame } = sfx time frame |> move (pos.x, pos.y)
 
 tick : Time -> SFX -> SFX
-tick dt sfx = { sfx | time <- sfx.time + dt }
+tick dt sfx = { sfx | 
+                time <- sfx.time + dt
+              , frame <- sfx.frame + 1
+              }

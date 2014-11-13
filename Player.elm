@@ -6,6 +6,7 @@ import Object (..)
 
 import Missile (Missile)
 
+import SFX (SFX) 
 import Missile
 import Missile.Standard
 import Missile.SplitShot
@@ -35,6 +36,9 @@ spawnImage = toForm (image 100 57 "assets/spawn-ship.gif")
 hiddenImage : Form
 hiddenImage = toForm (image 0 0 "assets/spawn-ship.gif")
 
+explosion : Form
+explosion = toForm (image 200 200 "assets/explosion.gif")
+
 player : Player
 player = 
     let p = object { pos = {x = -400, y = 0}
@@ -48,7 +52,20 @@ player =
                    , destroyed = False
                    , time = 0
                    }
-    in { p | passive <- passive }
+    in { p | 
+         passive <- passive
+       , destroyedSFX <- destroyedSFX
+       }
+
+destroyedSFX : Traits a -> SFX
+destroyedSFX { pos } =
+       { pos = pos
+       , time = 0
+       , duration = 1000
+       , sfx = (\t f -> if | f > 17 -> circle 0 |> filled red 
+                           | otherwise -> toForm (image 200 200 ("assets/explosion/" ++ show f ++ ".png")))
+       , frame = 0
+       }
 
 acceleration = 0.75
 

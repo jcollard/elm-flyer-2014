@@ -25,7 +25,8 @@ destroyedSFX { pos } =
     { pos = pos
     , time = 0
     , duration = 50
-    , sfx = (\t -> circle (t/2) |> filled orange)
+    , sfx = (\t _ -> circle (t/2) |> filled orange)
+    , frame = 0
     }
 
 defaultTraits : MissileTraits

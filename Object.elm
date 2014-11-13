@@ -59,5 +59,6 @@ defaultDestroyedSFX { pos } =
     { pos = pos
     , time = 0
     , duration = 100
-    , sfx = (\t -> circle t |> filled red)
+    , sfx = (\t _ -> circle t |> filled red)
+    , frame = 0
     }
