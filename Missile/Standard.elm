@@ -23,13 +23,13 @@ fire pos =
                             time = 0,
                             damage = 5,
                             cooldown = 15 }
-    in [{ missile | passive <- passive }]
+    in [{ missile | passive <- passive pos }]
 
-passive : Time -> MissileTraits -> MissileTraits
-passive dt traits = 
+passive : Location -> Time -> MissileTraits -> MissileTraits
+passive {x, y} dt traits = 
     let t = traits.time 
         t' = t + dt
-        vel' = { x = min t 15, y = 0 }
-    in { traits | time <- t', 
-                  vel <- vel'
+        pos' = { x = x + (t/2)^(2), y = y }
+    in { traits | time <- t' 
+                , pos <- pos'
        }
