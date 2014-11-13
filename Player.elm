@@ -11,6 +11,7 @@ import Missile.Standard
 import Missile.SplitShot
 import Missile.Rapid
 import Missile.Nuke
+import Missile.Shield
 
 import Keyboard.Keys as Keys
 
@@ -33,9 +34,6 @@ player =
                    , form = playerImage
 -- Quick debug by uncommenting one of these
                    , fire = Missile.Standard.fire
---                 , fire = Missile.SplitShot.fire,
---                 , fire = Missile.Rapid.fire,
---                 , fire = Missile.Nuke.fire,
                    ,  cooldown = 0
                    , destroyed = False
                    }
@@ -64,6 +62,8 @@ move player input =
                             { traits | fire <- Missile.Nuke.fire }
                           | k `Keys.equals` Keys.four ->
                             { traits | fire <- Missile.Standard.fire }
+                          | k `Keys.equals` Keys.five ->
+                            { traits | fire <- Missile.Shield.fire }
                           | otherwise -> traits
               otherwise -> traits
     in { player | traits <- traits' }

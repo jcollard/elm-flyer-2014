@@ -55,6 +55,8 @@ checkHitEnemy' acc m es =
     case es of
       [] -> (False, acc)
       (e::es') -> if 
+                    -- If the Enemys health is less than 1, skip it
+                    | e.traits.health <= 0 -> checkHitEnemy' (e::acc) m es'
                     -- If the Missile doesn't hit the enemy, continue down the list
                     | not <| intersect m e -> checkHitEnemy' (e::acc) m es'
                     -- If the Missle does hit the enemy, reduce the enemies health by the damage amount of the Missile.
