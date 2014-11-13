@@ -17,15 +17,15 @@ img = toForm (image width width "../assets/standard-missile.gif")
 
 fire : Location -> [Missile]
 fire pos = 
-    let missile =  object { defaultTraits |
-                            dim <- { width = width, height = height }
-                          , pos <- pos
-                          , form <- img
-                          , damage <- 5
-                          , cooldown <- 15 
-                          }
-    in [{ missile | passive <- passiveBuilder <| passive pos 1 },
-        { missile | passive <- passiveBuilder <| passive pos (-1) }]
+    let m =  missile { defaultTraits |
+                       dim <- { width = width, height = height }
+                     , pos <- pos
+                     , form <- img
+                     , damage <- 5
+                     , cooldown <- 15 
+                     }
+    in [{ m | passive <- passiveBuilder <| passive pos 1 },
+        { m | passive <- passiveBuilder <| passive pos (-1) }]
 
 passive : Location -> Float -> Time -> MissileTraits -> MissileTraits
 passive { x, y } modifier dt traits = 

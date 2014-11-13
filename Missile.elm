@@ -1,5 +1,6 @@
 module Missile where
 
+import SFX (SFX)
 import Util (..)
 import Object (..)
 
@@ -13,6 +14,19 @@ type Missile = Object AdditionalTraits {}
 
 img : Form
 img = toForm (image 25 25 "../assets/standard-missile.gif")
+
+missile : MissileTraits -> Missile
+missile traits = 
+    let m = object traits
+    in { m | destroyedSFX <- destroyedSFX }
+
+destroyedSFX : Traits a -> SFX
+destroyedSFX { pos } =
+    { pos = pos
+    , time = 0
+    , duration = 50
+    , sfx = (\t -> circle (t/2) |> filled orange)
+    }
 
 defaultTraits : MissileTraits
 defaultTraits = { pos = { x = 0, y = 0 }
