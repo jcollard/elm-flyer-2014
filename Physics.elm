@@ -35,12 +35,17 @@ checkHits' acc_ms ms es =
     case ms of
       [] -> (acc_ms, es)
       (m::ms') ->
-          let (hit, es') = checkHitEnemy m es
-          in if 
-              -- If hit, remove the missile
-                | hit -> checkHits' acc_ms ms' es'
-              -- Otherwise keep it
-                | otherwise -> checkHits' (m::acc_ms) ms' es'
+          if | m.traits.destroyed -> checkHits' (m::acc_ms) ms' es
+             | otherwise ->
+                 let (hit, es') = checkHitEnemy m es
+                 in if
+                     -- If hit, mark missile destroyed
+                     | hit -> 
+                         let mtraits = m.traits
+                             m' = { m | traits <- { mtraits | destroyed <- True } }
+                         in checkHits' (m'::acc_ms) ms' es'
+                     -- Otherwise keep it
+                     | otherwise -> checkHits' (m::acc_ms) ms' es'
 
 checkHitEnemy : Missile -> [Enemy] -> (Bool, [Enemy])
 checkHitEnemy = checkHitEnemy' []
