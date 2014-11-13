@@ -26,7 +26,7 @@ fire pos =
                      , pos <- pos
                      , form <- img
                      , damage <- 5
-                     , cooldown <- 15 
+                     , cooldown <- 10
                      }
     in [{ m | passive <- passiveBuilder <| passive pos 1 },
         { m | passive <- passiveBuilder <| passive pos (-1) }]

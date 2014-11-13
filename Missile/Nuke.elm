@@ -1,5 +1,8 @@
 module Missile.Nuke where
 
+import PowerUp
+import PowerUp (PowerUp, defaultPowerUp)
+
 import Object (..)
 import Util (..)
 import Missile (..)
@@ -34,4 +37,13 @@ passive { x , y } modifier dt traits =
                   pos <- pos',
                   dim <- dim',
                   form <- form'
+                    }
+powerupImage : Form
+powerupImage = toForm (image 42 42 "../assets/nuke-power-up.png")
+
+powerup : PowerUp
+powerup = 
+    PowerUp.powerup { defaultPowerUp | 
+                      powerup <- fire
+                    , form <- powerupImage
                     }

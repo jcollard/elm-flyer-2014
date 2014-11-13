@@ -1,5 +1,8 @@
 module Missile.Shield where
 
+import PowerUp
+import PowerUp (PowerUp, defaultPowerUp)
+
 import Util (..)
 import Object (..)
 import Missile (..)
@@ -33,3 +36,14 @@ passive {x, y} dt traits =
     in { traits | time <- t' 
                 , pos <- pos'
        }
+
+
+powerupImage : Form
+powerupImage = toForm (image 42 42 "../assets/shield-power-up.png")
+
+powerup : PowerUp
+powerup = 
+    PowerUp.powerup { defaultPowerUp | 
+                      powerup <- fire
+                    , form <- powerupImage
+                    }

@@ -22,13 +22,7 @@ enemy {pos, dim, form, health} =
                  , health = health
                  , time = 0
                  , destroyed = False
-                 , loot = (\ pos -> 
-                               let traits = splitshotPowerUp.traits
-                               in [{splitshotPowerUp |
-                                    traits <- { traits |
-                                                pos <- pos 
-                                              }
-                                   }])
+                 , loot = (\ pos -> [] )
                  }
     in object traits
 
