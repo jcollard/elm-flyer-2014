@@ -36,6 +36,7 @@ checkPlayerHit p es =
       (e::es') -> if 
                      | p.traits.destroyed -> p
                      | p.traits.time < 0 -> p
+                     | p.traits.lives < 1 -> p
                      | (intersect p e) -> 
                          let traits = p.traits
                          in { p | traits <- { traits |
