@@ -25,4 +25,4 @@ passive { x, y } dt traits =
         x' = x - 3*t + 200*sin( degrees <| 1.5*t)
         y' = y + 150 * (cos << degrees <| 2*t)
         pos' = { x = x', y = y' }
-    in { traits | time <- t', pos <- pos' }
+    in checkDestroyed { traits | time <- t', pos <- pos' }

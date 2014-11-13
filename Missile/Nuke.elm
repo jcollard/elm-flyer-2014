@@ -9,12 +9,12 @@ img = toForm (image 0 0 "../assets/standard-missile.gif")
 
 fire : Location -> [Missile]
 fire pos = 
-    let missile =  object { pos = pos,
-                            dim = { width = 0, height = 0 },
-                            form = img,
-                            time = 0,
-                            damage = 5,
-                            cooldown = 150 }
+    let missile =  object { defaultTraits |
+                            pos <- pos
+                          , dim <- { width = 0, height = 0 }
+                          , form <- img
+                          , damage <- 5
+                          , cooldown <- 150 }
         traits = missile.traits
         create_missile t = { missile | passive <- passive pos t }
     in map create_missile [0..19]

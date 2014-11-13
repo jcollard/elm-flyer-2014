@@ -15,6 +15,12 @@ enemy {pos, dim, form, health} =
                    dim = dim,
                    form = form,
                    health = health,
-                   time = 0 }
+                   time = 0,
+                   destroyed = False }
     in object traits
+
+checkDestroyed : EnemyTraits -> EnemyTraits
+checkDestroyed traits =
+    if | traits.health > 0 -> traits
+       | otherwise -> { traits | destroyed <- True }
           
