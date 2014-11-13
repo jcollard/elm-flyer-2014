@@ -6,19 +6,22 @@ import Object (..)
 import Enemy (..)
 import Missile (..)
 import Player (..)
+import Enemy.Generator (Generator, theGenerator)
 import Enemy.AlienWarrior as AlienWarrior
 
 type State = { player : Player
              , projectiles : [Missile]
              , enemies : [Enemy]
              , time : Time
-             , sfxs : [SFX] }
+             , sfxs : [SFX]
+             , generator : Generator 
+             }
 
 initialState : State
 initialState = { player = player 
                , projectiles = []
-               , enemies = [ AlienWarrior.spawn {x = 550, y = 0} 
-                           ]
+               , enemies = []
                , sfxs = []
-               , time = 0 }
+               , time = 0
+               , generator = theGenerator 42 }
 

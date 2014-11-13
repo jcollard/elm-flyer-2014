@@ -30,7 +30,7 @@ createEnemies' es wave num_enemies g =
     if | (num_enemies <= 0) -> (es, g)
        | otherwise -> 
            let (p, g') = float g
-           in if | p < 0.90 -> 
+           in if | p <= 1 -> 
                      let (e, g') = single wave g
                      in createEnemies' (e::es) wave (num_enemies - 1) g'
                  | otherwise ->
@@ -40,10 +40,13 @@ createEnemies' es wave num_enemies g =
 
 single : Int -> RndGen -> (Enemy, RndGen)
 single wave g = 
-    let pos = { x = screenBounds.right + 100, y = screenBounds.height/2 }
+    let 
+        (x_off, g') = floatRange (100, 1000) g
+        (y_off, g'') = floatRange (-100, 100) g'
+        pos = { x = screenBounds.right + x_off, y = 0 + y_off }
         ctor = AlienWarrior.spawn
         enemy = ctor pos
-    in (enemy, g)
+    in (enemy, g'')
 
 train : Int -> Int -> RndGen -> ([Enemy], RndGen)
 train wave n g = ([], g)

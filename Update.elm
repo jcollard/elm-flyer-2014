@@ -1,11 +1,13 @@
 module Update where
 
+import List
 import SFX (SFX)
 import Object (..)
 import Playground (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 import State (..)
+import Enemy.Generator (nextWave)
 import Debug
 
 import Player
@@ -16,12 +18,24 @@ update rw input state =
     let state' = Debug.watch "State" state in
     case input of
       Passive t ->
-          let fps = Debug.watch "FPS" (1000 / t) in
-          (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
+          let fps = Debug.watch "FPS" (1000 / t)
+              state' = (cleanUp << Physics.physics t) { state | time <- state.time + (t/20) }
+              state'' = checkWave state'
+          in state''
       otherwise ->  
         let state' = handleFire input state
             player' = Player.move state'.player input
         in { state' | player <- player' }
+
+checkWave : State -> State
+checkWave state =
+    if | (not << List.isEmpty) state.enemies -> state
+       | otherwise ->
+           let (enemies', generator') = nextWave state.generator
+           in { state | 
+                enemies <- enemies'
+              , generator <- generator'
+              }
 
 
 handleFire : Input -> State -> State
