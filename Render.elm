@@ -9,12 +9,13 @@ import Object (..)
 import Debug 
 
 render : RealWorld -> State -> [Form]
-render rw state = (background state.time) :: 
-                   renderObject state.player :: 
-                  (map renderObject state.projectiles) ++ 
-                  (map renderObject state.enemies) ++ 
-                  (map SFX.render state.sfxs) ++
-                  (ui rw)
+render rw state = [ background state.time
+                  , renderObject state.player
+                  , group <| map renderObject state.projectiles
+                  , group <| map renderObject state.enemies
+                  , group <| map SFX.render state.sfxs
+                  , group <| ui rw
+                  ]
 
 renderObject : Object a b -> Form
 renderObject { traits } = 
