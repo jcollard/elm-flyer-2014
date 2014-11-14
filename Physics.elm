@@ -53,8 +53,16 @@ checkPlayerPowerUp' ps' p ps =
                 let traits = p.traits
                     p' = { p | 
                            traits <- { traits |
-                                       fire <- powerup.traits.powerup } }
-                in (p', ps' ++ rest)
+                                       fire <- powerup.traits.powerup 
+                                     } 
+                         }
+                    powerup_traits = powerup.traits
+                    powerup' = { powerup | 
+                                 traits <- { powerup_traits |
+                                             destroyed <- True
+                                           }
+                               }
+                in (p', ps' ++ [powerup'] ++ rest)
       
 
 checkPlayerHit : Player -> [Enemy] -> Player
