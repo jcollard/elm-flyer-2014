@@ -3,6 +3,7 @@ module PowerUp where
 import Object (..)
 import Util (..)
 import Missile (Missile)
+import SFX (SFX)
 import Debug
 
 type AdditionalTraits = { powerup : Location -> [Missile] }
@@ -21,7 +22,10 @@ defaultPowerUp = { destroyed = False
 powerup : PowerUpTraits -> PowerUp
 powerup traits = 
     let p = object traits
-    in { p | passive <- passive }
+    in { p | 
+         passive <- passive
+       , destroyedSFX <- destroyedSFX 
+       }
 
 passive : Time -> PowerUpTraits -> PowerUpTraits
 passive t traits =
@@ -30,3 +34,12 @@ passive t traits =
           pos <- { x = traits.pos.x - 3*t, y = traits.pos.y } 
         , destroyed <- destroyed'
         }
+
+destroyedSFX : PowerUpTraits -> SFX
+destroyedSFX traits = 
+    { pos = traits.pos
+    , time = 0
+    , duration = 200
+    , frame = 0
+    , sfx = (\_ f -> scale (1/(toFloat f)) traits.form)
+    }
