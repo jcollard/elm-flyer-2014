@@ -24,6 +24,8 @@ powerup traits =
 
 passive : Time -> PowerUpTraits -> PowerUpTraits
 passive t traits =
-    { traits |
-      pos <- { x = traits.pos.x - 3*t, y = traits.pos.y } 
-    }
+    let destroyed' = traits.pos.x < -(screenBounds.width/2 + 50)
+    in  { traits |
+          pos <- { x = traits.pos.x - 3*t, y = traits.pos.y } 
+        , destroyed <- destroyed'
+        }
