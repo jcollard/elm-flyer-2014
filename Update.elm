@@ -80,6 +80,7 @@ cleanUp : State -> State
 cleanUp state =
     let (pps, newSFX) = cleanObjects state.projectiles
         (objs, newSFX') = cleanObjects state.enemies
+        (powerups', powerupSFX) = cleanObjects state.powerups
         (player', newSFX''') = cleanPlayer state.player
         sfxs' = filter cleanSFX (newSFX''' ++ newSFX ++ newSFX' ++ state.sfxs)
         gameover' = player'.traits.lives < 1
@@ -89,6 +90,7 @@ cleanUp state =
        , sfxs <- sfxs'
        , player <- player'
        , gameover <- gameover'
+       , powerups <- powerups'
        }
 
 cleanPlayer : Player -> (Player, [SFX])
