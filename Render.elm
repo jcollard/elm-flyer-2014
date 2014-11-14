@@ -9,18 +9,17 @@ import Object (..)
 import Debug 
 
 render : RealWorld -> State -> [Form]
-render rw state = [ background state.time
-                  , renderObject state.player
-                  , group <| map renderObject state.projectiles
-                  , group <| map renderObject state.enemies
-                  , group <| map renderObject state.powerups
-                  , group <| map SFX.render state.sfxs
-                  , group <| ui rw
-                  , group <| menu state
-                  , group <| paused state
-                  , group <| gameover state
-                  , group <| livesRemaining state
-                  ]
+render rw state = [ background state.time ] ++
+                  (map SFX.render state.sfxs) ++
+                  [ renderObject state.player ] ++
+                  (map renderObject state.projectiles) ++
+                  (map renderObject state.enemies) ++
+                  (map renderObject state.powerups) ++
+                  (livesRemaining state) ++
+                  (ui rw) ++
+                  (menu state) ++
+                  (paused state) ++
+                  (gameover state)
 
 liveImage = toForm (image 28 50 "assets/space-ship-vert.png")
 
