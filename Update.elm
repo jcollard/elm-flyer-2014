@@ -82,7 +82,7 @@ cleanUp state =
         (objs, newSFX') = cleanObjects state.enemies
         (powerups', powerupSFX) = cleanObjects state.powerups
         (player', newSFX''') = cleanPlayer state.player
-        sfxs' = filter cleanSFX (newSFX''' ++ newSFX ++ newSFX' ++ state.sfxs)
+        sfxs' = filter cleanSFX (powerupSFX ++ newSFX''' ++ newSFX ++ newSFX' ++ state.sfxs)
         gameover' = player'.traits.lives < 1
     in { state | 
          projectiles <- pps

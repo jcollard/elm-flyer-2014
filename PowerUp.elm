@@ -3,6 +3,7 @@ module PowerUp where
 import Object (..)
 import Util (..)
 import Missile (Missile)
+import Debug
 
 type AdditionalTraits = { powerup : Location -> [Missile] }
 
