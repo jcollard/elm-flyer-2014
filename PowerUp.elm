@@ -29,7 +29,7 @@ powerup traits =
 
 passive : Time -> PowerUpTraits -> PowerUpTraits
 passive t traits =
-    let destroyed' = traits.pos.x < -(screenBounds.width/2 + 50)
+    let destroyed' = traits.pos.x < -(screenBounds.width/2 + 200)
     in  { traits |
           pos <- { x = traits.pos.x - 3*t, y = traits.pos.y } 
         , destroyed <- destroyed'
@@ -41,5 +41,5 @@ destroyedSFX traits =
     , time = 0
     , duration = 200
     , frame = 0
-    , sfx = (\_ f -> scale (1/(toFloat f)) traits.form)
+    , sfx = (\t f -> move (0, t) <| scale (1/(max 1 ((toFloat f)/2))) traits.form)
     }
